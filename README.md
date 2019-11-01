@@ -20,9 +20,12 @@ The overall architecture looks like this:
 </p>
 
 ## Prerequisites
-* vCloud Director
+* Access to vCloud Director with org. admin user
 * Driver Linux machine accessible from all VM which will be configured as part of OpenShift installation.
 * DNSMASQ configured as DNS server on Driver machine
 * Accessible DHCP server on organisation network 
 * At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
+* Openshift template for vcenter is available from catalogue
+* LoadBalaner template is available from the catalogue
+
 
