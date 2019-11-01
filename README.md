@@ -17,3 +17,4 @@ The overall architecture looks like this:
 </p>
 
 ## Prerequisites
+* OpenShift Container Platform 3.11 and 4.1
