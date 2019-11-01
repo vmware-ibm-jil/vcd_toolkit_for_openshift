@@ -17,4 +17,9 @@ The overall architecture looks like this:
 </p>
 
 ## Prerequisites
-* OpenShift Container Platform 3.11 and 4.1
+* vCloud Director
+* Driver Linux machine accessible from all VM which will be configured as part of OpenShift installation.
+* DNSMASQ configured as DNS server on Driver machine
+* Accessible DHCP server on organisation network 
+* At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
+
