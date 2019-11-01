@@ -6,7 +6,7 @@
 The VCD Toolkit for OpenShift contains required articats to create OpenShift environment on vCloud Director. 
 
 <p align="center">
-<img alt="st-v2" src="images/Arch.png"/>
+<img alt="st-v2" src="Images/Arch.png"/>
 </p>
 
 ## Prerequisites
