@@ -37,11 +37,12 @@ Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
 
 The Ubuntu Linux machine which will host tookit will also act as DNS server for the OpenShift environment. This machine will also start the http server through which ignition file can be rendered to bootstrap machine at the time of boot.
 
-•	Install and configure Ubuntu 16.04 (Any version works but tested with 16.04)
-•	“apt-get install dnsmasq”   will install dnsmasq on the previously configure Ubuntu vm.
-•	dnsmasq provides both DNS and DHCP services. DHCP service can be turned off putting following entry for each interface:
-no-dhcp-interface=ens192
-no-dhcp-interface=ens160
+* Install and configure Ubuntu 16.04 (Any version works but tested with 16.04)
+* “apt-get install dnsmasq”   will install dnsmasq on the previously configure Ubuntu vm.
+* dnsmasq provides both DNS and DHCP services. DHCP service can be turned off putting following entry for each interface:
+
+  no-dhcp-interface=ens192
+  no-dhcp-interface=ens160
 
 
 
