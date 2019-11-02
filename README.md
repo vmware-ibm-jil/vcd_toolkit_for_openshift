@@ -27,6 +27,7 @@ The overall architecture looks like this:
 * At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
 * Openshift template for vcenter is available from catalogue
 * LoadBalaner template is available from the catalogue
+
 ** Test
 
 
