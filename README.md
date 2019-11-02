@@ -28,6 +28,13 @@ The overall architecture looks like this:
 * Openshift template for vcenter is available from catalogue
 * LoadBalaner template is available from the catalogue
 
-** Test
+## Insallaion
+<b>
+  <font size="+2">
+Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
+  </font>
+</b>
+
+
 
 
