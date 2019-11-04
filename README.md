@@ -57,7 +57,7 @@ Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
 This section describes the steps needed to configure the OpenShit environment.
 
 * Login as a user with sudo privilleges into Ubutu linux machine you configured in previos section
-* Excute "mkdir <uniq-directory-name>; cd <unique-directory-name>". This directory contains the unique OpenShift environment you are about to create.
+* Excute "mkdir uniq-directory-name; cd unique-directory-name". This directory contains the unique OpenShift environment you are about to create.
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
   Modify all the parameters very carefully
   <b> Networking Related Parameters</b>
@@ -103,7 +103,7 @@ This section describes the steps needed to configure the OpenShit environment.
    - LBTEMPLATE -- name of the LoadBalancer template. 
    <b>Create OpenShift Environment</b>
     Following steps can be put into shell scripts and run shell script to configure the OpenShift environment
-    - Execute "cd <unique-directory-name>" -- the directory where env.sh file is located
+    - Execute "cd unique-directory-name" -- the directory where env.sh file is located
     - Execute "PATH=$PATH:/usr/local/openshift;export PATH"
     - Execute "create_ignition.sh"
     - Execute "deploy.sh > main.tf"
