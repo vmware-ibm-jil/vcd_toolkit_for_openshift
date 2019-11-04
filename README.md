@@ -22,6 +22,7 @@ The overall architecture looks like this:
 This toolkit, once configured and executed to provision the OpenShift environment, it will deploy and configure loadbalacer, 3 master and one worker maching on vCloud director. It also updates dns entries for dnsmasq. It configures all the required port forwarding in loadbalacer. 
 <br></br>
 ## Prerequisites
+<br/>
 * Access to vCloud Director with org. admin user
 * Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation.
 * DNSMASQ configured as DNS server on Driver machine
