@@ -56,10 +56,9 @@ Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
 This section describes the steps needed to configure the OpenShit environment.
 
 * Login as a user with sudo privilleges into Ubutu linux machine you configured in previos section
-* Excute "mkdir uniq-directory-name; cd unique-directory-name". This directory contains the unique OpenShift environment you are about to create.
+* Excute "mkdir uniq-directory-name; cd unique-directory-name" -  This directory contains the unique OpenShift environment you are about to create.
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
-  Edit env.sh amd modify all the environment properties very carefully.
-  <br></br>
+* Edit env.sh amd modify all the environment properties very carefully.
   <br></br>
   <b> Networking Related Parameters</b>
    - DHCP=no -- This is for future use and only option at currently is no
