@@ -61,7 +61,7 @@ This section describes the steps needed to configure the OpenShit environment.
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
   Modifyt all the parameters very carefully
   DHCP=no -- This is for future use and only option at currently is no
-  HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section
+   - HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section
   
   
 
