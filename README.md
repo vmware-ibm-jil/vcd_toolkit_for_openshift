@@ -59,7 +59,8 @@ This section describes the steps needed to configure the OpenShit environment.
 * Login as a user with sudo privilleges into Ubutu linux machine you configured in previos section
 * Excute "mkdir <uniq-directory-name>; cd<unique-directory-name>". This directory contains the unique OpenShift environment you are about to create.
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
-  Modifyt all the parameters very carefully
+  Modify all the parameters very carefully
+  <b> Networking Related Parameters</b>
    - DHCP=no -- This is for future use and only option at currently is no
    - HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section.
    - HTTPPORT=80 -- The port on which HTTP server listen to.  
@@ -69,7 +70,29 @@ This section describes the steps needed to configure the OpenShit environment.
    - MASTER2 -- Static IP address which will be assigned to third master  machine. 
    - WORKER0 -- Static IP address which will be assigned to first worker  machine. 
    - NETMASK -- Netmask associated with the network on which above IP addresses were assgined to
-   - GATEWAY -- Gateway address associated with network on which above IP addreses were assigned to   
+   - GATEWAY -- Gateway address associated with network on which above IP addreses were assigned to 
+  
+  <b> Openshift Environment Property </b>
+  
+   - OPENSHIFT=/usr/local/openshift  -- Location of vcd toolkit for OpenShift
+   - FILETRANSPILER=$OPENSHIFT/filetranspiler/filetranspile -- Location of FILETRANSPILER the program which updates ignition with static ip
+   - MASTERNAME  prefix of name of the master machine 
+   - WORKERNAME -- prefix of name of the worker machine
+   - BASEDOMAIN --  name of the base domain
+   - PREFIXTODOMAIN -- name of the prfix which will be preneded to the base
+   - SERVICENETWORK -- service natowork i.e., 172.31.0.0
+   - SERVICENETWORKCIDR -- CIDR for above network 16 is recommended
+   - PULLSECRET -- location of pull secret file downloaded from Redhat portal for given registered supported Redhat user.
+   - OSENVID -- OpenShift ENV ID -- no change necessary
+   - HTTPIGNPATH -- Path to bootstrap ignition file -- no change needed
+   - DNSPOPULATE -- yes/no -- for dnsmasq yes is the default value. 
+   - DNSMASQCONF -- location of the dnsmasq file -- no change needed
+   
+  <b> TERRAFORM related environment properties </b>
+   - TERRAFORMID -- No change needed
+   - VCDVAPP -- name of vapp which contains all vms associated with OpenShift
+   - 
+   
   
   
 
