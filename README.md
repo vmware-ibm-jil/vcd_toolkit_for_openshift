@@ -59,6 +59,7 @@ This section describes the steps needed to configure the OpenShit environment.
 * Excute "mkdir uniq-directory-name; cd unique-directory-name". This directory contains the unique OpenShift environment you are about to create.
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
   Modify all the parameters very carefully
+  <br>
   <b> Networking Related Parameters</b>
    - DHCP=no -- This is for future use and only option at currently is no
    - HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section.
