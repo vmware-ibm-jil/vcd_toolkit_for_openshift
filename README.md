@@ -76,8 +76,8 @@ This section describes the steps needed to configure the OpenShit environment.
   
    - OPENSHIFT=/usr/local/openshift  -- Location of vcd toolkit for OpenShift
    - FILETRANSPILER=$OPENSHIFT/filetranspiler/filetranspile -- Location of FILETRANSPILER the program which updates ignition with static ip
-   - MASTERNAME  prefix of name of the master machine 
-   - WORKERNAME -- prefix of name of the worker machine
+   - MASTERNAME  prefix of name of the master machine -- cannot be changed, has to be master
+   - WORKERNAME -- prefix of name of the worker machine -- cannot be changed, has to be worker
    - BASEDOMAIN --  name of the base domain
    - PREFIXTODOMAIN -- name of the prfix which will be preneded to the base
    - SERVICENETWORK -- service natowork i.e., 172.31.0.0
