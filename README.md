@@ -102,7 +102,9 @@ This section describes the steps needed to configure the OpenShit environment.
    - VCDCATALOG -- name of the catalogue where OpenShift template and LoadBalacer template can be located
    - OSTEMPLATE -- name of the OpenShift template
    - LBTEMPLATE -- name of the LoadBalancer template. 
+   <br></br>
    <b>Create OpenShift Environment</b>
+   <br></br>
     Following steps can be put into shell scripts and run shell script to configure the OpenShift environment
     - Execute "cd unique-directory-name" -- the directory where env.sh file is located
     - Execute "PATH=$PATH:/usr/local/openshift;export PATH"
