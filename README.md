@@ -1,7 +1,7 @@
 # vcd_toolkit_for_openshift
 1.  [Introduction](#introduction)
 2.  [Prerequisites](#Prerequisites)
-3.  [Toolkit Installation](#installation)
+3.  [Toolkit Installation](#installation) 
 4.  [OpenShift Installation](#OpenShift Installation)
 
 ## Introduction
