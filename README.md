@@ -91,7 +91,16 @@ This section describes the steps needed to configure the OpenShit environment.
   <b> TERRAFORM related environment properties </b>
    - TERRAFORMID -- No change needed
    - VCDVAPP -- name of vapp which contains all vms associated with OpenShift
-   - 
+   - VCDVAPP -- No change needed 
+   - VCDORG -- organisation name for vcd under which the OpenShift environment vm's will be deployed
+   - VCDUSR -- VCD Org user who either has admin privilleges or ability  to create vm and associate resoruces with
+   - VCDPASS -- password of above user
+   - VCDNETWORK -- Organisation Network to which all vm will be associated with
+   - VCDIP -- VCD IP or fqdn
+   - VCDVDC -- virtual datacenter name for vcd under which the OpenShift environment vm's will be deployed
+   - VCDCATALOG -- name of the catalogue where OpenShift template and LoadBalacer template can be located
+   - OSTEMPLATE -- name of the OpenShift template
+   - LBTEMPLATE -- name of the LoadBalancer template. 
    
   
   
