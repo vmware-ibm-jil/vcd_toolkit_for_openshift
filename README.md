@@ -24,7 +24,9 @@ This toolkit, once configured and executed to provision the OpenShift environmen
 <b>Prerequisites</b>
 <br/>
   •	Access to vCloud Director with org. admin user
+  <br/>
   •	Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation.
+  <br/>
   •	DNSMASQ configured as DNS server on Driver machine
   •	Accessible DHCP server on organisation network 
   •	At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
