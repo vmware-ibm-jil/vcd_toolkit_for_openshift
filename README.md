@@ -2,6 +2,7 @@
 1.  [Introduction](#introduction)
 2.  [Prerequisites](#Prerequisites)
 3.  [Insallaion Driver Linux Machine](#)
+4>  [OpenShift Installation]
 
 ## Introduction
 The VCD Toolkit for OpenShift contains required articats to create OpenShift environment on vCloud Director. This tookit, once all the environment variables populated with valid values, create ignition file for the deployemnt, updates the DNS server (See prerequisite below). The toolkit then creates following virtual machines on the org/orgvdc using Terraform.
@@ -21,7 +22,7 @@ The overall architecture looks like this:
 </p>
 This toolkit, once configured and executed to provision the OpenShift environment, it will deploy and configure loadbalacer, 3 master and one worker maching on vCloud director. It also updates dns entries for dnsmasq. It configures all the required port forwarding in loadbalacer. 
 <br></br>
-<font size="+2">
+<font size="+4">
 <b>Prerequisites</b>
 </font>
 <br/>
