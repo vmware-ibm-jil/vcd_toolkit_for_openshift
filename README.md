@@ -23,14 +23,14 @@ This toolkit, once configured and executed to provision the OpenShift environmen
 <br></br>
 <b>Prerequisites</b>
 <br/>
-* Access to vCloud Director with org. admin user
-* Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation.
-* DNSMASQ configured as DNS server on Driver machine
-* Accessible DHCP server on organisation network 
-* At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
-* Openshift template for vcenter is available from catalogue
-* LoadBalaner template is available from the catalogue
-* Vaid user on Redhat wich contains pull-secreat which will be passed to OpenShift ignition file.
+  •	Access to vCloud Director with org. admin user
+  •	Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation.
+  •	DNSMASQ configured as DNS server on Driver machine
+  •	Accessible DHCP server on organisation network 
+  •	At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
+  •	Openshift template for vcenter is available from catalogue
+  •	LoadBalaner template is available from the catalogue
+  •	Vaid user on Redhat wich contains pull-secreat which will be passed to OpenShift ignition file.
 
 ## Insallaion Driver Linux Machine
 <b>
