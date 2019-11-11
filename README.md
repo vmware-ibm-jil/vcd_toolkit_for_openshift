@@ -15,6 +15,8 @@ Master-2
 Worker-0
 
 Once the vms are deployed the toolkit applies the customer properties and attaching the appropriate ignition files to vms and powers them on. The bootstrap machin can be shutdown once the environment is configured.
+<br/>
+The LoadBalancer machine has haproxy configured. Based on ip and port (figure below)  for all vms it configures the haproxy configuration and start haproxy service.
 
 The overall architecture looks like this:
 <p align="center">
@@ -42,7 +44,8 @@ This toolkit, once configured and executed to provision the OpenShift environmen
   <br/>
   •	Vaid user on Redhat wich contains pull-secreat which will be passed to OpenShift ignition file.
   <br/>
-
+  <br/>
+  
 ## Insallaion Driver Linux Machine
 <b>
   <font size="+2">
