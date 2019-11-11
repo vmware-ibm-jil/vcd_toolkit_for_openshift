@@ -1,7 +1,7 @@
 # vcd_toolkit_for_openshift
 1.  [Introduction](#introduction)
 2.  [Prerequisites](#Prerequisites)
-3.  [Insallaion Driver Linux Machine](#)
+3.  [Insallaion of Driver Linux Machine](#)
 4.  [OpenShift Installation](#)
 
 ## Introduction
@@ -47,7 +47,7 @@ The architecture is flexible. Any given tenant, can configure one or more OpenSh
   <br/>
   <br/>
   
-## Insallaion Driver Linux Machine
+## Insallaion of Driver Linux Machine
 <b>
   <font size="+2">
 Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
