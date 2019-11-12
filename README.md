@@ -127,10 +127,10 @@ This section describes the steps needed to configure the OpenShit environment.
     - Execute "create_ignition.sh"
     - Execute "deploy.sh > main.tf"
     - Execute "terraform init"
-    - Execute "terraform apply -auto-approve"
+    - Execute "terraform apply --auto-approve"
     - Execute "vcd.sh"
     - Execute "sed -i "s/false/true/" main.tf"
-    - Execut "terraform apply -auto-approve" 
+    - Execut "terraform apply --auto-approve" 
    
   
   
