@@ -43,7 +43,7 @@ The architecture is flexible. Any given tenant, can configure one or more OpenSh
   <br/>
   •	LoadBalaner template is available from the catalogue
   <br/>
-  •	Vaid user on Redhat wich contains pull-secreat which will be passed to OpenShift ignition file.
+  •	Valid user on Redhat wich contains pull-secreat which will be passed to OpenShift configuration file.
   <br/>
   <br/>
   
