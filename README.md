@@ -125,6 +125,7 @@ This section describes the steps needed to configure the OpenShit environment.
     - Execute "cd unique-directory-name" -- the directory where env.sh file is located
     - Execute "PATH=$PATH:/usr/local/openshift;export PATH"
     - Execute "create_ignition.sh"
+    - Execute "add_dns.sh"
     - Execute "deploy.sh > main.tf"
     - Execute "terraform init"
     - Execute "terraform apply --auto-approve"
