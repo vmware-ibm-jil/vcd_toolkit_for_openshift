@@ -85,7 +85,7 @@ This section details steps required to configure the OCP environment.
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
 * Edit env.sh to specify the required environment properties
   
-  **Networking-related Parameters  
+  **Networking-related Parameters**
    - DHCP=no -- This is for future use and only option at currently is no
    - HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section.
    - HTTPPORT=80 -- The port on which HTTP server listen to.  
@@ -97,7 +97,7 @@ This section details steps required to configure the OCP environment.
    - NETMASK -- Netmask associated with the network on which above IP addresses were assgined to
    - GATEWAY -- Gateway address associated with network on which above IP addreses were assigned to 
   
-  **OCP-related Parameters
+  **OCP-related Parameters**
    - OPENSHIFT=/usr/local/openshift  -- Location of vcd toolkit for OpenShift
    - FILETRANSPILER=$OPENSHIFT/filetranspiler/filetranspile -- Location of FILETRANSPILER the program which updates ignition with static ip
    - MASTERNAME  prefix of name of the master machine -- cannot be changed, has to be master
@@ -112,7 +112,7 @@ This section details steps required to configure the OCP environment.
    - DNSPOPULATE -- yes/no -- for dnsmasq yes is the default value. 
    - DNSMASQCONF -- location of the dnsmasq file -- no change needed
    
-  **Terraform/vCD-related Parameters
+  **Terraform/vCD-related Parameters**
    - TERRAFORMID -- No change needed
    - VCDVAPP -- name of vapp which contains all vms associated with OpenShift
    - VCDVAPP -- No change needed 
