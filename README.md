@@ -60,21 +60,21 @@ Once the install process is complete, you will have an OCP cluster with a load b
 
 ## Installation of Driver Linux Machine
 
-**Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration**
-
-The Driver Linux Machine runs Ubuntu 16.04, hosts the installation toolkit, and serves as DNS server for the environment. It also hosts the HTTP server through which ignition files are provided to the bootstrap machine at boot time.
+The Driver Linux Machine hosts the installation toolkit and serves as DNS server for the environment. It also hosts the HTTP server through which ignition files are provided to the bootstrap machine at boot time.
 
  * Install and configure Ubuntu 16.04 (any version should work)
- * Install Dnsmasq by running “apt-get install dnsmasq”
- * dnsmasq provides both DNS and DHCP services. DHCP service can be turned off putting following entry for each interface:
-
-   no-dhcp-interface=ens192
+ 
+ * Install Dnsmasq by running “apt-get install dnsmasq”. Dnsmasq provides both DNS and DHCP services. If desired, DHCP service can be turned off by adding the following entry for each interface: no-dhcp-interface=ens192
+ 
+ * If the OCP installation is not performed as root user, add  following line to end of the file /etc/sudoers "<user_name>  ALL=(ALL:ALL) NOPASSWD: ALL"
+ 
+ * Restart DNS service by running "service dnsmasq restart"
+ 
+ * Put dummy-host entry into /etc/host and verify DNS resolution by executing the command "nslookup <dummy-host> <dns-ip-address>" from other hosts and verify that it returns the ipaddress associated with dummy-host
   
- * If the execution of OpenShift installation is not done by root user, at the <b>end of the file /etc/sudoers </b>"<user_name>  ALL=(ALL:ALL) NOPASSWD: ALL" 
- * restart dns service with "service  dnsmasq restart"
- * Put dummy host entry into /etc/host and from other machine execute the command "nslookup <dummy-host> <dns-ip-address>" and verify that it returns the ipaddress associated with dummy-host
- * As a root user go to execute following command - "cd /; python -m SimpleHTTPServer 80". Depending on python version the command syntax needs to be adjusted. 
- * As a root user execute "tar -xvf vcd_toolkit_for_openshift4.tar". It will create openshift directory under /usr/local which contains needed utility to install and configure openshift environment.
+ * Execute following command as root user - "cd /; python -m SimpleHTTPServer 80". Depending on version of Python, command syntax may need to be adjusted
+ 
+ * Execute following command as root uer - "tar -xvf vcd_toolkit_for_openshift4.tar". This will create a directory under /usr/local which contains all utilities required to install and configure the OCP environment.
 
 ## OpenShift Installation
 
