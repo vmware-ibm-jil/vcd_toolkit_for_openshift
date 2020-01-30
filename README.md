@@ -82,7 +82,7 @@ This section details steps required to configure the OCP environment.
 
 * Login as a user with sudo privileges into the Driver Linux Machine you configured previously
 * Excute "mkdir uniq-directory-name; cd unique-directory-name" to host the OCP environment's files you are about to create
-* Execut "cp /usr/local/openshift/env.sh.template env.sh"
+* Execute "cp /usr/local/openshift/env.sh.template env.sh"
 * Edit env.sh to specify the required environment properties
   
   **Networking-related Parameters**
