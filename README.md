@@ -13,11 +13,11 @@ Cloud providers utilize vCD to easily create and manage virtual data centers (�
 
 •	Cloud Administrator – cloud provider administrator who owns and operates the provider’s vCD environment
 
-•	Tenant Administrator – vCD Organization user with root privileges (within the Orgnization's vCD environment). Owns and operates Red Hat OpenShift ("OCP) instances within her vCD Organization. Will be part of OCP DevOps team.
+•	Tenant Administrator – vCD Organization user with root privileges (within the Orgnization's vCD environment). Owns and operates Red Hat OpenShift ("OCP) clusters within her vCD Organization.
 
 **Multi-Tenancy Model**
 
-We enable a model where each development team within the enterprise’s IT organization can have its own independent dedicated OCP instances:
+We enable a model where each development team within the enterprise’s IT organization can have its own independent dedicated OCP clusters:
 
 •	Each customer business unit will be mapped to a unique vCD “Organization”
 
@@ -29,7 +29,7 @@ We enable a model where each development team within the enterprise’s IT organ
 
 This repository contains artifacts to create OCP clusters on vCD. Once all the required environment variables are populated with valid values, this install process creates ignition files for the deployment and updates the DNS server (see prerequisite below). It then creates the following VMs within the specified vCD Organization/OrgVDC using the Terraform vCloud Director provider.
 
-* Loadbalancer
+* Load balancer
 * Bootstrap 
 * Master-0 
 * Master-1
@@ -38,7 +38,7 @@ This repository contains artifacts to create OCP clusters on vCD. Once all the r
 
 Once the VMs are deployed, the install process creates custom properties, attaches appropriate ignition files and powers them on. The Bootstrap VM can be shutdown once the environment is configured.
 
-The LoadBalancer VM has HAProxy configured. The HAProxy is configured with IP & port details for the VMs and the HAProxy service is then started.
+The load balancer VM has HAProxy configured. The HAProxy is configured with IP & port details for the VMs and the HAProxy service is then started.
 
 The overall architecture looks like this:
 <p align="center">
@@ -86,7 +86,7 @@ This section details steps required to configure the OCP environment.
 * Edit env.sh to specify the required environment properties
   
   **Networking-related Parameters**
-   - DHCP=no -- This is for future use and only option at currently is no
+   - DHCP=no -- This is for future use and only option that currently is set to no
    - HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section.
    - HTTPPORT=80 -- The port on which HTTP server listen to.  
    - BOOTSTRAP -- Static IP address which will be assigned to bootstrap machine. 
