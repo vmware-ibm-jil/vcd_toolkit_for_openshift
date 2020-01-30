@@ -9,6 +9,23 @@ VMware vCloud Director (“vCD”) is a leading cloud service-delivery platform 
 
 Cloud providers utilize vCD to easily create and manage virtual data centers (“VDC”) from common infrastructure to cater to heterogeneous enterprise needs. A policy-driven approach helps ensure enterprises have isolated virtual resources, independent role-based authentication, and fine-grained control.
 
+User Roles and Personas
+
+•	Cloud Administrator – cloud provider administrator who owns and operates the provider’s vCD environment.
+
+•	Tenant Administrator – vCD Organization user with root privileges. Owns and operates OCP instances within her vCD Organization. Will be part of OCP DevOps team.
+
+Multi-Tenancy Model
+
+We enable a model where each development team within the enterprise’s IT organization can have its own independent dedicated OCP instances:
+
+•	Each customer business unit will be mapped to a unique vCD “Organization”
+
+•	Each vCD Organization includes one or more OrgVDCs
+
+•	Tenant Administrator will be able to provision one or more OCP instances within each OrgVDC
+
+
 The VCD Toolkit for OpenShift contains required articats to create OpenShift environment on vCloud Director. This tookit, once all the environment variables populated with valid values, create ignition file for the deployemnt and updates the DNS server (See prerequisite below). The toolkit then creates following virtual machines on the org/orgvdc using Terraform.
 
 Loadbalancer
