@@ -126,7 +126,7 @@ This section details steps required to configure the OCP environment.
    - OSTEMPLATE -- name of the OpenShift template
    - LBTEMPLATE -- name of the LoadBalancer template. 
    
-   **Create OpenShift Environment
+ * **Create OpenShift Environment
 
    Following steps can be put into a shell script if desired.
    
