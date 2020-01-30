@@ -1,8 +1,8 @@
 # vcd_toolkit_for_openshift
-1.  [Introduction]
-2.  [Prerequisites]
-3.  [Installation of Driver Linux Machine]
-4.  [OpenShift Installation]
+1.  Introduction
+2.  Prerequisites
+3.  Installation of Driver Linux Machine
+4.  OpenShift Installation
 
 ## Introduction
 VMware vCloud Director (“vCD”) is a leading cloud service-delivery platform used by some of the world’s most popular cloud providers to operate and manage successful cloud-service businesses. Using vCloud Director, cloud providers deliver secure, efficient, and elastic cloud resources to thousands of enterprises and IT teams across the world.
@@ -44,21 +44,19 @@ The overall architecture looks like this:
 <p align="center">
 <img alt="st-v2" src="Images/Arch.png"/>
 </p>
-This toolkit, once configured and executed to provision the OpenShift environment, it will deploy and configure loadbalacer, 3 master and one worker maching on vCloud director. It also updates dns entries for dnsmasq. It configures all the required port forwarding in loadbalacer. 
-<br></br>
-The architecture is flexible. Any given tenant, can configure one or more OpenShift environment in given org/orgvdc.
-<font size="+4">
+
+Once the install process is complete, you will have an OCP cluster with a load balancer, three master nodes and one worker node. The install process also updates DNS entries in Dnsmasq as well as port forwarding in the load balancer.
 
 ## Prerequisites
 
-* Access to vCloud Director with org. admin user
-* Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation
-* DNSMASQ configured as DNS server on Driver machine
-*	Accessible DHCP server on organisation network
-*	At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
-*	Openshift template for vcenter is available from catalogue
-* LoadBalaner template is available from the catalogue
-*	Valid user on Redhat wich contains pull-secreat which will be passed to OpenShift configuration file.
+* Access to vCD environment with vCD Organization admin user privileges
+* Driver Linux Machine accessible from all VMs which needed to be configured as part of the OCP installation
+* Dnsmasq configured as DNS server on Driver Linux Machine
+*	Accessible DHCP server on vCD Organisation network
+*	At least 6 IP addresses on the vCD Organization network (additional IP addresses required if you wish to have additional worker nodes in the OCP cluster)
+*	VM template for OCP
+* VM template for load balancer
+*	Valid Red Hat pull-secret which will be specified in OCP configuration file
   
 ## Installation of Driver Linux Machine
 <b>
