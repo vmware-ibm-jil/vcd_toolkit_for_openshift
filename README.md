@@ -70,7 +70,7 @@ The Driver Linux Machine hosts the installation toolkit and serves as DNS server
  
  * Restart DNS service by running "service dnsmasq restart"
  
- * Put dummy-host entry into /etc/host and verify DNS resolution by executing the command "nslookup <dummy-host> <dns-ip-address>" from other hosts and verify that it returns the ipaddress associated with dummy-host
+ * Put dummy-host entry into /etc/host and verify DNS resolution by executing the command "nslookup <dummy-host> <dns-ip-address>" from other hosts and verify that it returns IP address associated with dummy-host
   
  * Execute following command as root user - "cd /; python -m SimpleHTTPServer 80". Depending on version of Python, command syntax may need to be adjusted
  
@@ -78,14 +78,14 @@ The Driver Linux Machine hosts the installation toolkit and serves as DNS server
 
 ## OpenShift Installation
 
-This section describes the steps needed to configure the OpenShit environment.
+This section details steps required to configure the OCP environment.
 
-* Login as a user with sudo privilleges into Ubutu linux machine you configured in previos section
-* Excute "mkdir uniq-directory-name; cd unique-directory-name" -  This directory contains the unique OpenShift environment you are about to create.
+* Login as a user with sudo privileges into the Driver Linux Machine you configured previously
+* Excute "mkdir uniq-directory-name; cd unique-directory-name" to host the OCP environment's files you are about to create
 * Execut "cp /usr/local/openshift/env.sh.template env.sh"
-* Edit env.sh amd modify all the environment properties very carefully.
-  <br></br>
-  <b> Networking Related Parameters</b>
+* Edit env.sh to specify the required environment properties
+  
+  **Networking-related Parameters  
    - DHCP=no -- This is for future use and only option at currently is no
    - HTTPIP=###HTTPIP### -- This is the HTTP Server IP which renders HTTP file. This is the IP of Ubuntu machine configured as a driver machine in previous section. The http server was started on this machine as described in previous section.
    - HTTPPORT=80 -- The port on which HTTP server listen to.  
@@ -97,8 +97,7 @@ This section describes the steps needed to configure the OpenShit environment.
    - NETMASK -- Netmask associated with the network on which above IP addresses were assgined to
    - GATEWAY -- Gateway address associated with network on which above IP addreses were assigned to 
   
-  <b> Openshift Environment Property </b>
-  
+  **OCP-related Parameters
    - OPENSHIFT=/usr/local/openshift  -- Location of vcd toolkit for OpenShift
    - FILETRANSPILER=$OPENSHIFT/filetranspiler/filetranspile -- Location of FILETRANSPILER the program which updates ignition with static ip
    - MASTERNAME  prefix of name of the master machine -- cannot be changed, has to be master
@@ -113,7 +112,7 @@ This section describes the steps needed to configure the OpenShit environment.
    - DNSPOPULATE -- yes/no -- for dnsmasq yes is the default value. 
    - DNSMASQCONF -- location of the dnsmasq file -- no change needed
    
-  <b> TERRAFORM/VCD related environment properties </b>
+  **Terraform/vCD-related Parameters
    - TERRAFORMID -- No change needed
    - VCDVAPP -- name of vapp which contains all vms associated with OpenShift
    - VCDVAPP -- No change needed 
@@ -126,10 +125,11 @@ This section describes the steps needed to configure the OpenShit environment.
    - VCDCATALOG -- name of the catalogue where OpenShift template and LoadBalacer template can be located
    - OSTEMPLATE -- name of the OpenShift template
    - LBTEMPLATE -- name of the LoadBalancer template. 
-   <br></br>
-   <b>Create OpenShift Environment</b>
-   <br></br>
-    Following steps can be put into shell scripts and run shell script to configure the OpenShift environment
+   
+   **Create OpenShift Environment
+
+   Following steps can be put into a shell script if desired.
+   
     - Execute "cd unique-directory-name" -- the directory where env.sh file is located
     - Execute "PATH=$PATH:/usr/local/openshift;export PATH"
     - Execute "create_ignition.sh"
@@ -139,10 +139,5 @@ This section describes the steps needed to configure the OpenShit environment.
     - Execute "terraform apply --auto-approve"
     - Execute "vcd.sh"
     - Execute "sed -i "s/false/true/" main.tf"
-    - Execut "terraform apply --auto-approve" 
+    - Execute "terraform apply --auto-approve" 
    
-  
-  
-
-
-
