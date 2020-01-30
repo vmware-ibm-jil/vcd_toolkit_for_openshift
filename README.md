@@ -27,7 +27,7 @@ We enable a model where each development team within the enterprise’s IT organ
 
 **Installation Process Overview**
 
-This repository contains required artifacts to create Red Hat OpenShift ("OCP") environment on vCD. Once all the requires environment variables are populated with valid values, this install process creates ignition files for the deployemnt and updates the DNS server (see prerequisite below). We then create the following virtual machines on the vCD Organization/OrgVDC using Terraform.
+This repository contains artifacts to create Red Hat OpenShift ("OCP") clusters on vCD. Once all the required environment variables are populated with valid values, this install process creates ignition files for the deployemnt and updates the DNS server (see prerequisite below). It then creates the following VMs within the specified vCD Organization/OrgVDC using the Terraform vCloud Director provider.
 
 * Loadbalancer
 * Bootstrap 
@@ -36,9 +36,9 @@ This repository contains required artifacts to create Red Hat OpenShift ("OCP") 
 * Master-2
 * Worker-0
 
-Once the vms are deployed the toolkit applies the custome properties and attaching the appropriate ignition files to vms and powers them on. The bootstrap machin can be shutdown once the environment is configured.
-<br/>
-The LoadBalancer machine has haproxy configured. Based on ip and port (figure below)  for all vms it configures the haproxy configuration and start haproxy service.
+Once the VMs are deployed, the install process creates custom properties, attaches appropriate ignition files and powers them on. The Bootstrap VM can be shutdown once the environment is configured.
+
+The LoadBalancer VM has HAProxy configured. The HAProxy is configured with IP & port details for the VMs and the HAProxy service is then started.
 
 The overall architecture looks like this:
 <p align="center">
