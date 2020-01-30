@@ -11,9 +11,9 @@ Cloud providers utilize vCD to easily create and manage virtual data centers (�
 
 **User Roles and Personas**
 
-•	Cloud Administrator – cloud provider administrator who owns and operates the provider’s vCD environment.
+•	Cloud Administrator – cloud provider administrator who owns and operates the provider’s vCD environment
 
-•	Tenant Administrator – vCD Organization user with root privileges. Owns and operates OCP instances within her vCD Organization. Will be part of OCP DevOps team.
+•	Tenant Administrator – vCD Organization user with root privileges (within the Orgnization's vCD environment). Owns and operates Red Hat OpenShift ("OCP) instances within her vCD Organization. Will be part of OCP DevOps team.
 
 **Multi-Tenancy Model**
 
@@ -23,11 +23,11 @@ We enable a model where each development team within the enterprise’s IT organ
 
 •	Each vCD Organization includes one or more OrgVDCs
 
-•	Tenant Administrator will be able to provision one or more OCP instances within each OrgVDC
+•	Tenant Administrator will be able to provision one or more OCP clusters within each OrgVDC
 
 **Installation Process Overview**
 
-This repository contains artifacts to create Red Hat OpenShift ("OCP") clusters on vCD. Once all the required environment variables are populated with valid values, this install process creates ignition files for the deployemnt and updates the DNS server (see prerequisite below). It then creates the following VMs within the specified vCD Organization/OrgVDC using the Terraform vCloud Director provider.
+This repository contains artifacts to create OCP clusters on vCD. Once all the required environment variables are populated with valid values, this install process creates ignition files for the deployment and updates the DNS server (see prerequisite below). It then creates the following VMs within the specified vCD Organization/OrgVDC using the Terraform vCloud Director provider.
 
 * Loadbalancer
 * Bootstrap 
@@ -52,23 +52,20 @@ Once the install process is complete, you will have an OCP cluster with a load b
 * Access to vCD environment with vCD Organization admin user privileges
 * Driver Linux Machine accessible from all VMs which needed to be configured as part of the OCP installation
 * Dnsmasq configured as DNS server on Driver Linux Machine
-*	Accessible DHCP server on vCD Organisation network
-*	At least 6 IP addresses on the vCD Organization network (additional IP addresses required if you wish to have additional worker nodes in the OCP cluster)
+*	Accessible DHCP server on vCD Organization network
+*	At least 6 IP addresses on the vCD Organization network (additional IP addresses are required if you wish to have additional worker nodes in the OCP cluster)
 *	VM template for OCP
 * VM template for load balancer
 *	Valid Red Hat pull-secret which will be specified in OCP configuration file
-  
+
 ## Installation of Driver Linux Machine
-<b>
-  <font size="+2">
-Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
-  </font>
-</b>
 
- The Ubuntu Linux machine which will host tookit will also act as DNS server for the OpenShift environment. This machine will also start the http server through which ignition file can be rendered to bootstrap machine at the time of boot.
+**Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration**
 
- * Install and configure Ubuntu 16.04 (Any version works but tested with 16.04)
- * “apt-get install dnsmasq”   will install dnsmasq on the previously configure Ubuntu vm
+The Driver Linux Machine runs Ubuntu 16.04, hosts the installation toolkit, and serves as DNS server for the environment. It also hosts the HTTP server through which ignition files are provided to the bootstrap machine at boot time.
+
+ * Install and configure Ubuntu 16.04 (any version should work)
+ * Install Dnsmasq by running “apt-get install dnsmasq”
  * dnsmasq provides both DNS and DHCP services. DHCP service can be turned off putting following entry for each interface:
 
    no-dhcp-interface=ens192
