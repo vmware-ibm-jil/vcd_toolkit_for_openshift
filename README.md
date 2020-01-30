@@ -25,15 +25,16 @@ We enable a model where each development team within the enterprise’s IT organ
 
 •	Tenant Administrator will be able to provision one or more OCP instances within each OrgVDC
 
+**Installation Process Overview**
 
-The VCD Toolkit for OpenShift contains required articats to create OpenShift environment on vCloud Director. This tookit, once all the environment variables populated with valid values, create ignition file for the deployemnt and updates the DNS server (See prerequisite below). The toolkit then creates following virtual machines on the org/orgvdc using Terraform.
+This repository contains required artifacts to create Red Hat OpenShift ("OCP") environment on vCD. Once all the requires environment variables are populated with valid values, this install process creates ignition files for the deployemnt and updates the DNS server (see prerequisite below). We then create the following virtual machines on the vCD Organization/OrgVDC using Terraform.
 
-Loadbalancer
-Bootstrap 
-Master-0 
-Master-1
-Master-2
-Worker-0
+* Loadbalancer
+* Bootstrap 
+* Master-0 
+* Master-1
+* Master-2
+* Worker-0
 
 Once the vms are deployed the toolkit applies the custome properties and attaching the appropriate ignition files to vms and powers them on. The bootstrap machin can be shutdown once the environment is configured.
 <br/>
@@ -47,26 +48,17 @@ This toolkit, once configured and executed to provision the OpenShift environmen
 <br></br>
 The architecture is flexible. Any given tenant, can configure one or more OpenShift environment in given org/orgvdc.
 <font size="+4">
-<b>Prerequisites</b>
-</font>
-<br/>
-  •	Access to vCloud Director with org. admin user
-  <br/>
-  •	Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation.
-  <br/>
-  •	DNSMASQ configured as DNS server on Driver machine
-  <br/>
-  •	Accessible DHCP server on organisation network 
-  <br/>
-  •	At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
-  <br/>
-  •	Openshift template for vcenter is available from catalogue
-  <br/>
-  •	LoadBalaner template is available from the catalogue
-  <br/>
-  •	Valid user on Redhat wich contains pull-secreat which will be passed to OpenShift configuration file.
-  <br/>
-  <br/>
+
+## Prerequisites
+
+* Access to vCloud Director with org. admin user
+* Driver Linux machine accessible from all VM which needed to be configured for OpenShift installation
+* DNSMASQ configured as DNS server on Driver machine
+*	Accessible DHCP server on organisation network
+*	At least 6 IP address on this organisation network (In future extra IP will be needed as worker node added)
+*	Openshift template for vcenter is available from catalogue
+* LoadBalaner template is available from the catalogue
+*	Valid user on Redhat wich contains pull-secreat which will be passed to OpenShift configuration file.
   
 ## Installation of Driver Linux Machine
 <b>
