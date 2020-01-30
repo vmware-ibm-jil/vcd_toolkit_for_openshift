@@ -1,21 +1,21 @@
 # vcd_toolkit_for_openshift
-1.  [Introduction](#introduction)
-2.  [Prerequisites](#Prerequisites)
-3.  [Insallaion of Driver Linux Machine](#)
-4.  [OpenShift Installation](#)
+1.  [Introduction]
+2.  [Prerequisites]
+3.  [Installation of Driver Linux Machine]
+4.  [OpenShift Installation]
 
 ## Introduction
 VMware vCloud Director (“vCD”) is a leading cloud service-delivery platform used by some of the world’s most popular cloud providers to operate and manage successful cloud-service businesses. Using vCloud Director, cloud providers deliver secure, efficient, and elastic cloud resources to thousands of enterprises and IT teams across the world.
 
 Cloud providers utilize vCD to easily create and manage virtual data centers (“VDC”) from common infrastructure to cater to heterogeneous enterprise needs. A policy-driven approach helps ensure enterprises have isolated virtual resources, independent role-based authentication, and fine-grained control.
 
-User Roles and Personas
+**User Roles and Personas**
 
 •	Cloud Administrator – cloud provider administrator who owns and operates the provider’s vCD environment.
 
 •	Tenant Administrator – vCD Organization user with root privileges. Owns and operates OCP instances within her vCD Organization. Will be part of OCP DevOps team.
 
-Multi-Tenancy Model
+**Multi-Tenancy Model**
 
 We enable a model where each development team within the enterprise’s IT organization can have its own independent dedicated OCP instances:
 
@@ -68,7 +68,7 @@ The architecture is flexible. Any given tenant, can configure one or more OpenSh
   <br/>
   <br/>
   
-## Insallaion of Driver Linux Machine
+## Installation of Driver Linux Machine
 <b>
   <font size="+2">
 Driver/DNS/HTTP Server Ubuntu 16.04 Linux machine configuration:
