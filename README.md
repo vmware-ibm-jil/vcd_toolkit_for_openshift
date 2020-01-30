@@ -19,7 +19,7 @@ Cloud providers utilize vCD to easily create and manage virtual data centers (�
 
 We enable a model where each development team within the enterprise’s IT organization can have its own independent dedicated OCP clusters:
 
-•	Each customer business unit will be mapped to a unique vCD “Organization”
+•	Each customer business unit will be mapped to a unique vCD Organization
 
 •	Each vCD Organization includes one or more OrgVDCs
 
@@ -74,7 +74,7 @@ The Driver Linux Machine hosts the installation toolkit and serves as DNS server
   
  * Execute following command as root user - "cd /; python -m SimpleHTTPServer 80". Depending on version of Python, command syntax may need to be adjusted
  
- * Execute following command as root uer - "tar -xvf vcd_toolkit_for_openshift4.tar". This will create a directory under /usr/local which contains all utilities required to install and configure the OCP environment.
+ * Execute following command as root user - "tar -xvf vcd_toolkit_for_openshift4.tar". This will create a directory under /usr/local which contains all utilities required to install and configure the OCP environment.
 
 ## OpenShift Installation
 
