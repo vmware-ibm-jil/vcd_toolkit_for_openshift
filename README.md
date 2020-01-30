@@ -5,6 +5,10 @@
 4.  [OpenShift Installation](#)
 
 ## Introduction
+VMware vCloud Director (“vCD”) is a leading cloud service-delivery platform used by some of the world’s most popular cloud providers to operate and manage successful cloud-service businesses. Using vCloud Director, cloud providers deliver secure, efficient, and elastic cloud resources to thousands of enterprises and IT teams across the world.
+
+Cloud providers utilize vCD to easily create and manage virtual data centers (“VDC”) from common infrastructure to cater to heterogeneous enterprise needs. A policy-driven approach helps ensure enterprises have isolated virtual resources, independent role-based authentication, and fine-grained control.
+
 The VCD Toolkit for OpenShift contains required articats to create OpenShift environment on vCloud Director. This tookit, once all the environment variables populated with valid values, create ignition file for the deployemnt and updates the DNS server (See prerequisite below). The toolkit then creates following virtual machines on the org/orgvdc using Terraform.
 
 Loadbalancer
