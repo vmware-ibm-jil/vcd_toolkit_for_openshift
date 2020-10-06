@@ -1,0 +1,155 @@
+# Switching the org and vdc so that one can create vapps and find networks
+
+provider "vcd" {
+  user                 = "###VCDUSR###"
+  password             = "###VCDPASS###"
+  org                  = "###VCDORG###"
+  url                  = "###VCDURL###"
+  max_retry_timeout    = 30
+  allow_unverified_ssl = true
+  logging              = true
+}
+
+
+
+resource "vcd_vapp" "###VCDVAPP###" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+
+  name = "###VCDVAPP###"
+
+  # Would be needed if network was created here
+  # depends_on = ["vcd_network_routed.net"]
+}
+#
+
+resource "vcd_vapp_vm" "bootstrap" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+
+
+  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  name          = "bootstrap"
+  catalog_name  = "###VCDCATALOG###"
+  template_name = "###OSTEMPLATE###"
+  memory        = "16384"
+  cpus           = "4"
+  expose_hardware_virtualization = true
+  power_on      = false
+
+  network {
+    type               = "org"
+    name               = "###VCDNETWORK###"
+    ip_allocation_mode = "DHCP"
+    is_primary         = true
+  }
+
+  override_template_disk {
+    bus_type           = "paravirtual"
+    size_in_mb         = "128000"
+    bus_number         = 0
+    unit_number        = 0
+    iops               = 500
+    storage_profile    = "4 IOPS/GB"
+  }
+
+  depends_on = ["vcd_vapp_vm.loadbalancer"]
+}
+
+resource "vcd_vapp_vm" "master" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+
+  count = 3
+
+  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  name          = "master-${count.index}"
+  catalog_name  = "###VCDCATALOG###"
+  template_name = "###OSTEMPLATE###"
+  memory        = "16384"
+  cpus           = "4"
+  power_on      = false
+
+  network {
+    type               = "org"
+    name               = "###VCDNETWORK###"
+    ip_allocation_mode = "DHCP"
+    is_primary         = true
+  }
+
+  override_template_disk {
+    bus_type           = "paravirtual"
+    size_in_mb         = "256000"
+    bus_number         = 0
+    unit_number        = 0
+    iops               = 1000
+    storage_profile    = "4 IOPS/GB"
+  }
+
+  depends_on = ["vcd_vapp_vm.worker"]
+}
+resource "vcd_vapp_vm" "worker" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+
+  count = 3
+
+  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  name          = "worker-${count.index}"
+  catalog_name  = "###VCDCATALOG###"
+  template_name = "###OSTEMPLATE###"
+  memory        = "16384"
+  cpus           = "4"
+  expose_hardware_virtualization = true
+  power_on      = false
+
+  network {
+    type               = "org"
+    name               = "###VCDNETWORK###"
+    ip_allocation_mode = "DHCP"
+    is_primary         = true
+  }
+
+  override_template_disk {
+    bus_type           = "paravirtual"
+    size_in_mb         = "256000"
+    bus_number         = 0
+    unit_number        = 0
+    iops               = 1000
+    storage_profile    = "4 IOPS/GB"
+  }
+
+  depends_on = ["vcd_vapp_vm.bootstrap"]
+}
+
+resource "vcd_vapp_vm" "loadbalancer" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+
+
+  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  name          = "loadbalancer"
+  catalog_name  = "OpenShiftImports"
+  template_name = "###LBTEMPLATE###"
+  memory        = "16384"
+  cpus           = "4"
+  power_on      = false
+
+  network {
+    type               = "org"
+    name               = "###VCDNETWORK###"
+    ip_allocation_mode = "MANUAL"
+    ip                 = "###LB###"
+    is_primary         = true
+  }
+
+  override_template_disk {
+    bus_type           = "paravirtual"
+    size_in_mb         = "128000"
+    bus_number         = 0
+    unit_number        = 0
+    iops               = 500
+    storage_profile    = "4 IOPS/GB"
+  }
+
+}

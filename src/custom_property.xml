@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductSectionList
+ xmlns="http://www.vmware.com/vcloud/v1.5"
+ xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+ <ovf:ProductSection
+ required="true">
+ <ovf:Info>Information about the installed software</ovf:Info>
+ <ovf:Property
+ ovf:type="string"
+ ovf:key="guestinfo.ignition.config.data"
+ ovf:value="###DATA###">
+ <ovf:Label>Data</ovf:Label>
+ </ovf:Property>
+ <ovf:Property
+ ovf:type="string"
+ ovf:key="guestinfo.ignition.config.data.encoding"
+ ovf:value="base64">
+ <ovf:Label>Encoding</ovf:Label>
+ </ovf:Property>
+  </ovf:ProductSection>
+</ProductSectionList>
