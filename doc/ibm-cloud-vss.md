@@ -36,7 +36,7 @@ To browse the available images:
 * select *vApp Templates*
 * There are 3 images in the list that we will be using:
   * rhcos...
-* If you want to add your own Catalogs and more, see the [documentation about catalogs](about-catalogs)
+* If you want to add your own Catalogs and more, see the [documentation about catalogs](#about-catalogs)
 
 ## Networking
 Much of the following is covered in general in the [Operator Guide/Networking](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-networking). Below is the specific network configuration required. 
@@ -427,6 +427,8 @@ Its really easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs
 
 
 ### Debug
+ * connectivity problems between bastion and other VMs: Temporarily turn off firewall on Bastion.  We have added firewall rules but there may be more "allow" rules needed.
+
  * To test  HTTP server.  Look at `/usr/local/openshift/env/env.example.com/append-bootstrap.ign` and copy the "source" url.  This is the critical bootstrap-static.ign file that is the primary ignition file
  * get the file:  `wget http://172.16.0.10/usr/local/openshift/env/env.example.com/bootstrap-static.ign`
 
