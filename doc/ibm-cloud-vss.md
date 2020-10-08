@@ -27,16 +27,16 @@ You order **VMware Solutions Shared** in IBM Cloud.  When you order a new instan
 * we recommend that you create individual Users/passwords for each person accessing the environment
 * Note: You don't need any Private network Endpoints unless you want to access the VDC from other IBM Cloud accounts over Private network
 
-## Create the OpenShift image catalog
+## Choose an Image Catalog
 
-We need a catalog of images to use with OpenShift
+We need a catalog of VM images to use for our OpenShift VMs.
+Fortunately IBM provides a set of images that are tailored to work for OpenShift deployments.
+To browse the available images:
 * From your vCloud Director console, click on **Libraries** in the header menu. 
-* select *Catalog* and then click *new*
-* suggested name is *OpenShiftImports*
-* toggle on `subscribe to an external catalog`
-* URL is TODO
-* select *automatically download*
-* password - TODO
+* select *vApp Templates*
+* There are 3 images in the list that we will be using:
+  * rhcos...
+* If you want to add your own Catalogs and more, see the [documentation about catalogs](about-catalogs)
 
 ## Networking
 Much of the following is covered in general in the [Operator Guide/Networking](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-networking). Below is the specific network configuration required. 
@@ -66,7 +66,8 @@ Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can u
 
 Gather the IPs and Sub-allocated IP Addresses for the ESG, for future reference:
 * The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.    
-* Go to main menu > Edges > Select ESG
+* Go to main menu > Edges > Select your ESG
+  - TODO - the UI has changed since this writing.  Need to update next line about what to save and where to find it.(its still right there...)
   - Go to `Gateway Interfaces` and save the Gateways, subnets, primary IPs of the  `tenant-external` and `servicexx`  External Networks.
     - the tenant-external network allows external internet routing
     - the service network allows routing to IBM Cloud private network /services
@@ -441,7 +442,7 @@ as of now we just power down the VMs which is not a good approach.  We need to a
 * RedHat doc for **Installing on VSphere**  https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere.html#installation-installing-bare-metal_installing-vsphere
 * [**Troubleshooting OpenShift Installations**](https://docs.openshift.com/container-platform/4.5/support/troubleshooting/troubleshooting-installations.html)
 * Operating VMware Solutions Shared - Knowledge Center:  https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide
-* More about Catalogs: https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-catalogs
+* <a name="about-catalogs">More about Catalogs:</a> https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-catalogs
 * [**IBM Cloud VMWare Solutions Shared Announcement**](https://www.ibm.com/cloud/blog/announcements/ibm-cloud-for-vmware-solutions-shared-ga)
 * [**Getting Started with IBM Cloud VMWare Solutions Shared**](https://www.ibm.com/cloud/blog/3-steps-to-get-started-with-ibm-cloud-for-vmware-solutions-shared)
 * interesting article about installing OCP on VMWare: https://medium.com/ibm-garage/an-ocp-4-3-upi-deployment-on-a-vsphere-environment-b0aef0230847
