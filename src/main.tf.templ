@@ -129,7 +129,7 @@ resource "vcd_vapp_vm" "loadbalancer" {
 
   vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
   name          = "loadbalancer"
-  catalog_name  = "OpenShiftImports"
+  catalog_name  = "###VCDCATALOG###"
   template_name = "###LBTEMPLATE###"
   memory        = "16384"
   cpus           = "4"

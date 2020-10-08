@@ -1,9 +1,3 @@
-# vcd_toolkit_for_openshift
-1.  Introduction
-2.  Prerequisites
-3.  Installation of Driver VM (Bastion)
-4.  OpenShift (OCP) Installation
-
 ## Introduction
 The vcd_toolkit_for-openshift is a set of scripts, VM Templates, and instructions which allow you to quickly deploy RedHat OpenShift into a VMware Cloud Director environment.
 
