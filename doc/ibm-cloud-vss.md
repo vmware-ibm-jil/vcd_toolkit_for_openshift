@@ -35,7 +35,9 @@ To browse the available images:
 * From your vCloud Director console, click on **Libraries** in the header menu. 
 * select *vApp Templates*
 * There are 3 images in the list that we will be using:
-  * rhcos...
+  * rhcos OpenShift 4.5.6 - OpenShift CoreOS template
+  * rhcos OpenShift 4.5.17 - OpenShift CoreOS template
+  * LB4Openshift-0.1 - Load balancer template
 * If you want to add your own Catalogs and more, see the [documentation about catalogs](#about-catalogs)
 
 ## Networking
@@ -210,17 +212,14 @@ After the VM is created, connect it to your network:
   * `unzip terraform_0.12.17_linux_amd64.zip -d /usr/local/bin/`
 
 #### Update firewall
-Allow http and DNS traffic into bastion.  Issue the following commands.  You should get `success` message from each:
+Allow HTTP(port 80) and DNS(port 53) traffic into bastion.  Issue the following commands.  You should get `success` message from each:
 ```
 firewall-cmd --add-port=80/tcp --zone=public --permanent
 firewall-cmd --add-port=53/tcp --zone=public --permanent
+firewall-cmd --add-port=53/udp --zone=public --permanent
+firewall-cmd --reload
 ```
-
-Stop and start firewall to pick up the changes:
-```
-  systemctl stop firewalld
-  systemctl start firewalld
-```
+[More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
 #### Install DNS - based on dnsmasq 
   * `yum install dnsmasq`
@@ -303,7 +302,10 @@ Now the toolkit is installed in `/usr/local/openshift`
 ### Install OpenShift
 
 #### Update env.sh
-* copy this-repo/config/env.sh into `/home/yourHome/target` .  
+See `this repo`/config/env.sh which is self documenting. 
+Now you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN. 
+The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
+* copy `this-repo`/config/env.sh into `/home/yourHome/$PREFIXTODOMAIN` .  
 * Fill in the variables in env.sh as documented in env.sh itself.
 
 ####  Create OpenShift Environment
@@ -436,12 +438,12 @@ Its really easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs
 as of now we just power down the VMs which is not a good approach.  We need to adopt better operating procedures. This included **Cluster Recovery** and **outstanding certificate signing requests (CSRs).** See https://www.openshift.com/blog/enabling-openshift-4-clusters-to-stop-and-resume-cluster-vms
 
 ## Resources and References
-* These 3 RedHat blogs describe the overall install process we followed:
-  - The overall approach is a  **Bare Metal Install**, also known as UPI - User provisioned Infrastructure, along with static IPs. See:
+
+* The overall approach is a  **Bare Metal Install**, also known as UPI - User provisioned Infrastructure, along with static IPs. These 3 RedHat blogs describe the overall approach:
   - [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart) 
   - [Install with Static IPs](https://www.openshift.com/blog/openshift-4-2-vsphere-install-with-static-ips)
   - [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart) 
-* RedHat doc for **Installing on VSphere**  https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere.html#installation-installing-bare-metal_installing-vsphere
+* RedHat doc for **Installing Openshift on VSphere**  https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere.html#installation-installing-bare-metal_installing-vsphere
 * [**Troubleshooting OpenShift Installations**](https://docs.openshift.com/container-platform/4.5/support/troubleshooting/troubleshooting-installations.html)
 * Operating VMware Solutions Shared - Knowledge Center:  https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide
 * <a name="about-catalogs">More about Catalogs:</a> https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-catalogs
@@ -453,6 +455,7 @@ as of now we just power down the VMs which is not a good approach.  We need to a
 * [**VMWare Cloud Director Documentation**](https://docs.vmware.com/en/VMware-Cloud-Director/index.html)
 * **ConsulLabs** has a nice approach toward installation, and **GOVC setup** that i'd like to try https://labs.consol.de/container/platform/openshift/2020/01/31/ocp43-installation-vmware.html
 * Look at Oren Oichman's **Airgap install, part 2** (then go back to part1):  https://medium.com/@two.oes
+* [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 * [firewall-cmd examples](https://www.thegeekdiary.com/5-useful-examples-of-firewall-cmd-command/)
-* tsl handshake timeout - how to debug: https://github.com/openshift/installer/issues/2687
+* TLS handshake timeout - how to debug: https://github.com/openshift/installer/issues/2687
 
