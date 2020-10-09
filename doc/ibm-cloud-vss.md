@@ -318,7 +318,7 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 *  You need the **VCD Terraform Provider** (plugin) in the local dir: `tar -xvf /root/terraform-plugin.tar .`
 TODO document where we got this, and why it needs to be in this dir rather than /usr/local/openshift/.
 
-### Create Ignition files, install-config.yaml, and ssh keys:
+#### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
 * Edit create_ignition.sh and  change line 10 to point to the correct openshift-install binary
    - TODO The OpenShift installer binary: `openshift-install` appears to be unique to the version of OpenShift. We downloaded both the openshift-install 4.4 and 4.5 binaries to /usr/local/openshift/ with unique names and we edit the install script to point to the correct installer.  There should be a better way to do this...
@@ -362,7 +362,7 @@ It will also add other properties to bootstrap and loadbalancer.
 - To verify that vcd.sh worked, run `vcd_get_after_vcd_put.sh` which will GET all the config that vcd.sh POSTed.  The script writes files to /tmp
    - Verify the files in /tmp.  There should be correct ignition data in the Product Section in each CoreOS VApp template. (Hint: run base64 -d on the encoded parts to see what is encoded)
 
-### Let OpenShift finish the installation:
+#### Let OpenShift finish the installation:
 Once you power on all the VMs there is an intricate dance between all the VMs which results in a completed install. You play a manual role as well by approving pending certificates.
 
 - power on all the VMs in the VAPP.  Alternatively:
@@ -372,17 +372,18 @@ Once you power on all the VMs there is an intricate dance between all the VMs wh
     This directory contains both the cluster config and the kubeadmin password for UI login
 - export KUBECONFIG=`pwd`/kubeconfig
 - Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
-   ```oc get nodes
+```
+oc get nodes
  NAME                                  STATUS   ROLES    AGE   VERSION
  master-00.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-01.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-02.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af36 
 ```
- - Wait until `oc get csr` shows no new 'Pending' Conditions for about 10 mins. This took about 20 mins
-  - Run `oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve`  to approve the 'Pending' certificates
-  - Watch to see if other CSRs are in 'Pending' and repeat the approval step
-  - Watch `oc get co`. Confirm the RH cluster operators are all 'Available'
-  ```
+- Wait until `oc get csr` shows no new 'Pending' Conditions for about 10 mins. This took about 20 mins
+- Run `oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve`  to approve the 'Pending' certificates
+- Watch to see if other CSRs are in 'Pending' and repeat the approval step
+- Watch `oc get co`. Confirm the RH cluster operators are all 'Available'
+```
   # oc get co
  NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
  authentication                             4.4.19    True        False         False      28m
