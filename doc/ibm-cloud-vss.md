@@ -420,19 +420,21 @@ oc get nodes
 
 #### Configuration to enable OCP console login
 - Get the console url by running `oc get routes console -n openshift-console`
-  ```
-  # oc get routes console -n openshift-console
+
+```
+oc get routes console -n openshift-console
  NAME      HOST/PORT                                                  PATH   SERVICES   PORT    TERMINATION          WILDCARD
  console   console-openshift-console.apps.ocp44-myprefix.my.com          console    https   reencrypt/Redirect   None
- ```
+```
+
 - Create Firewall Rule and DNAT using a Public IP in the Edge Gateway in VCD console. TODO instructions
  
 - Add name resolution to direct console to the Public IP in /etc/hosts on the client that will login to the Console UI. 
   As an example:
-  ```
+```
   1.2.3.4 console-openshift-console.apps.ocp44-myprefix.my.com
   1.2.3.4 oauth-openshift.apps.ocp44-myprefix.my.com
- ```
+```
  
 - From a browser, connect to the "console host" from the `oc get routes` command with https. You will need to accept numerous security warnings as the deployment is using self-signed certificates.
 
