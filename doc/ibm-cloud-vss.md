@@ -8,7 +8,7 @@ For those who are familiar with VMWare, think of Cloud Director as a big Postgre
 The **IBMCloud VMWare Solution Shared** is a payGo environment. You pay a low monthly fee, and after that you pay for VM vCPU and Memory based on usage.  Each instance comes with 5 public IP addresses, and a RedHat subscription.
 
 #### Install approach
-The overall approach is a **Bare Metal Install**, also known as UPI - User provisioned Infrastructure.  The  [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart) and [Install with Static IPs](https://www.openshift.com/blog/openshift-4-2-vsphere-install-with-static-ips) and [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart) describe the approach that is followed by the scripting we used.
+The overall approach is a **Bare Metal Install**, also known as UPI - User provisioned Infrastructure.  The  [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart) and [Install with Static IPs](https://www.openshift.com/blog/openshift-4-2-vsphere-install-with-static-ips) and [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart) describe the approach that is followed by the vcd_toolkit_for_openshift.
 
 ## Ordering
 You order **VMware Solutions Shared** in IBM Cloud.  When you order a new instance, a **DataCenter** is created in vCloud Director.  It takes about an hour.
@@ -210,6 +210,8 @@ After the VM is created, connect it to your network:
   * `yum install python3`
   * `wget https://releases.hashicorp.com/terraform/0.12.17/terraform_0.12.17_linux_amd64.zip`
   * `unzip terraform_0.12.17_linux_amd64.zip -d /usr/local/bin/`
+You also need the [Terraform VMware vCloud Director Provider](https://www.terraform.io/docs/providers/vcd/index.html).
+TODO I can't find the download link :) Source is [here](https://github.com/vmware/terraform-provider-vcd)
 
 #### Update firewall
 Allow HTTP(port 80) and DNS(port 53) traffic into bastion.  Issue the following commands.  You should get `success` message from each:
@@ -292,61 +294,84 @@ The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve thei
 
 #### Install VCD Toolkit
 * clone this repo
-* cp -r <this repo>/src/ /usr/local/openshift/
+* `cp -r <this repo>/src/ /usr/local/openshift/`
+
 Now the toolkit is installed in `/usr/local/openshift`
 
-* These scripts will deploy OCP  4.4 or 4.5 with 3 master and 3 worker nodes without any storage provisioners.
+* The toolkit supports the deployment of OCP 4.4 or 4.5 with 3 master and 3 worker nodes without any storage provisioners.
     - TODO: allow for flexible number of worker nodes. Changes would have to occur in env.sh.template, create_ignition.sh, deploy.sh, LBDNS.xml, main.tf.withProperties and vcd.sh
     - TODO: make scripts generic to OCP versions allowing user to specify version and change create_ignition.sh to use appropriate installer version binary
 
 ### Install OpenShift
 
-#### Update env.sh
+#### Update env.sh:
+`env.sh` will contain all the configuration for your cluster.
 See `this repo`/config/env.sh which is self documenting. 
-Now you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN. 
+At this point you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN. 
 The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
-* copy `this-repo`/config/env.sh into `/home/yourHome/$PREFIXTODOMAIN` .  
+* `mkdir /home/yourhome/$PREFIXTODOMAIN`
+* `cd /home/yourHome/$PREFIXTODOMAIN`  
+* `cp this-repo/config/env.sh /home/yourHome/$PREFIXTODOMAIN`   
 * Fill in the variables in env.sh as documented in env.sh itself.
 
-####  Create OpenShift Environment
+#### Configure Terraform VCD Provider:
+*  You need the **VCD Terraform Provider** (plugin) in the local dir: `tar -xvf /root/terraform-plugin.tar .`
+TODO document where we got this, and why it needs to be in this dir rather than /usr/local/openshift/.
 
-  - Execute `cd unique-directory-name` -- the directory where env.sh file is located
-  - Need the **VCD Terraform Provider** (plugins) in the local dir: `tar -xvf /root/terraform-plugin.tar .`
-TODO document where we got this, and why it needs to be HERE.
-  - Execute `PATH=$PATH:/usr/local/openshift;export PATH`
-      - TODO we moved /usr/local/openshift/openshift-install to openshift-install_44 and _45
-      - TODO Edit create_ignition.sh, change line 10 the Openshift-install name
-  - Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
-  - setup passwordless SSH:  create_ignition generated ssh keys and put the public key into the OCP `install-config.yaml`.  The OCP install process will propagate the public key to the bootstrap, masters, workers, and loadbalancer VMs.  Userid to ssh to will be `core`.   Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
+### Create Ignition files, install-config.yaml, and ssh keys:
+* Execute `PATH=$PATH:/usr/local/openshift;export PATH`
+* Edit create_ignition.sh and  change line 10 to point to the correct openshift-install binary
+   - TODO The OpenShift installer binary: `openshift-install` appears to be unique to the version of OpenShift. We downloaded both the openshift-install 4.4 and 4.5 binaries to /usr/local/openshift/ with unique names and we edit the install script to point to the correct installer.  There should be a better way to do this...
+all name
+* Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
+* setup passwordless SSH:  create_ignition generated ssh keys and put the public key into the OCP `install-config.yaml`.  The OCP install process will propagate the public key to the bootstrap, masters, workers, and loadbalancer VMs.  Userid to ssh to will be `core`.   Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
 ```
 cp ssh_key /root/.ssh/id_rsa
 cp ssh_key.pub /root/.ssh/id_rsa.pub
 ```
-- update DNS:
-  - 1st run:  Execute `add_dns.sh` 
+At this point you have created a set of configuration files in /home/youhome/$PREFIXTODOMAIN/$IGNITIONDIR
+
+
+#### Update DNS:
+* On 1st run only:  Execute `add_dns.sh` 
       This will add the content of `NEEDED_DNS_ENTRIES` into `/etc/hosts` and `NEEDED_SVC_ENTRIES` into `/etc/dnsmasq.conf`.  It fails with a `sed -e` error but seems to work anyway.
-  - subsequent runs (i.e. if you `terraform destroy` all):  Change `/etc/hosts` and `/etc/dnsmasq.conf` manually and then restart dnsmasq:
+* On subsequent runs (i.e. after you run `terraform destroy` all):  Change `/etc/hosts` and `/etc/dnsmasq.conf` manually
+* restart dnsmasq:
 `service dnsmasq restart`    
-  
+ 
+ 
+#### Create the VMs:
 - Execute `deploy.sh > main.tf`. This creates the terraform tf
 
-* **TODO**  We still pull the LoadBalancer image from OpenShiftImports.  Edit main.tf to pull from OpenShiftImports for LB.
-  - Run `terraform init`
-  - Run `terraform apply --auto-approve`
-This should complete with
+- Run `terraform init`
+- Run `terraform apply --auto-approve`
+
+This should complete with:
 ```
 Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
 ```
-  - Run `vcd.sh`. This will add a "ProductSectionList" containing 2 properties: `guestinfo.ignition.config.data`  information to the VApp Template for each CoreOS VM, and `guestinfo.ignition.config.data.encoding` with a value of `base64`. 
-  - To verify that vcd.sh worked, run `vcd_get_after_vcd_put.sh` which will GET all the config that vcd.sh POSTed.  The script writes files to /tmp
-   - Verify the files in /tmp.  There should be correct ignition data in the Product Section in each CoreOS VApp template
-  - change terraform template to power on the VMs: run `sed -i "s/false/true/" main.tf` 
-  - TODO its much faster to just power on all VMs in the vApp... which is better?
-  -  Run `terraform apply --auto-approve`
-  - cd to authentication directory: `cd <clusternameDir>/auth` 
+
+At this point you have created bootstrap, loadbalancer, 3 master, and 3 worker VMs!  They are powered off.
+
+
+#### Add custom properties to the VMs
+We need to add properties to the VMs which are used for further configuration of the VMs during the installation process.
+
+- Run `vcd.sh`. This will add a "ProductSectionList" containing 2 properties: `guestinfo.ignition.config.data`  information to the VApp Template for each CoreOS VM, and `guestinfo.ignition.config.data.encoding` with a value of `base64`. 
+It will also add other properties to bootstrap and loadbalancer.
+- To verify that vcd.sh worked, run `vcd_get_after_vcd_put.sh` which will GET all the config that vcd.sh POSTed.  The script writes files to /tmp
+   - Verify the files in /tmp.  There should be correct ignition data in the Product Section in each CoreOS VApp template. (Hint: run base64 -d on the encoded parts to see what is encoded)
+
+### Let OpenShift finish the installation:
+Once you power on all the VMs there is an intricate dance between all the VMs which results in a completed install. You play a manual role as well by approving pending certificates.
+
+- power on all the VMs in the VAPP.  Alternatively:
+- change terraform template to power on the VMs: run `sed -i "s/false/true/" main.tf` 
+- To power on the VMs run `terraform apply --auto-approve`
+- cd to authentication directory: `cd <clusternameDir>/auth` 
     This directory contains both the cluster config and the kubeadmin password for UI login
-   - export KUBECONFIG=`pwd`/kubeconfig
-   - Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
+- export KUBECONFIG=`pwd`/kubeconfig
+- Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
    ```oc get nodes
  NAME                                  STATUS   ROLES    AGE   VERSION
  master-00.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
@@ -391,41 +416,39 @@ Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
  service-catalog-controller-manager         4.4.19    True        False         False      95m
  storage  
 ```
-### Configuration to enable OCP console login
-  - Get the console url by running `oc get routes console -n openshift-console`
+
+#### Configuration to enable OCP console login
+- Get the console url by running `oc get routes console -n openshift-console`
   ```
   # oc get routes console -n openshift-console
  NAME      HOST/PORT                                                  PATH   SERVICES   PORT    TERMINATION          WILDCARD
  console   console-openshift-console.apps.ocp44-myprefix.my.com          console    https   reencrypt/Redirect   None
  ```
-  - Create Firewall Rule and DNAT using a Public IP in the Edge Gateway in VCD console. TODO instructions
+- Create Firewall Rule and DNAT using a Public IP in the Edge Gateway in VCD console. TODO instructions
  
-  - Add name resolution to direct console to the Public IP in /etc/hosts on the client that will login to the Console UI. 
+- Add name resolution to direct console to the Public IP in /etc/hosts on the client that will login to the Console UI. 
   As an example:
   ```
   1.2.3.4 console-openshift-console.apps.ocp44-myprefix.my.com
   1.2.3.4 oauth-openshift.apps.ocp44-myprefix.my.com
  ```
  
-  - Using favorite browser connect to the "console host" from the `oc get routes` command with https. Note you will need to accept numerous security warnings as the deployment is using self-signed certificates.
+- From a browser, connect to the "console host" from the `oc get routes` command with https. You will need to accept numerous security warnings as the deployment is using self-signed certificates.
 
 **That's it!  You have an OpenShift Cluster ready to go enjoy!**
 
 
 ### Reset the environment and redeploy
-Its really easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and start over:
+Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and start over:
 ```
-   terraform destroy --auto-approve.       # deletes all the VMs
-   mv cp4apps/ backup-cp4apps<date>        # backup everything generated in last run
-   mkdir cp4apps                           # new deployment directory
-   cp backup-cp4apps<date>/env.sh cp4apps/ # env.sh contains all the needed configuration
+   terraform destroy --auto-approve        # deletes all the VMs
+   mv /home/yourHome/#PREFIXTODOMAIN/ some-backup-dir               # backup everything generated in last run
+   mkdir /home/yourHome/#PREFIXTODOMAIN                             # new deployment directory
+   cp some-backup-dir/env.sh /home/yourHome/#PREFIXTODOMAIN/        # env.sh contains all the needed configuration
+   cp -r some-backup-dir/.terraform//home/yourHome/#PREFIXTODOMAIN/ 
 ```
-    
-* Do we need to copy .terraform/*? or will it be picked up from /usr/local/openshift/:
-```
- cp -r cp4apps-20200825/.terraform/ myprefix/
-```
- Go back to **Create OpenShift Environment**
+* TODO can we put .terraform (VCD Provider) into /usr/local/openshift/:
+* Go back to **Create Create Ignition files**
 
 
 ### Debug
