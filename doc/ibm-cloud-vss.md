@@ -451,7 +451,7 @@ Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and st
    cp -r some-backup-dir/.terraform//home/yourHome/#PREFIXTODOMAIN/ 
 ```
 * TODO can we put .terraform (VCD Provider) into /usr/local/openshift/:
-* Go back to **Create Create Ignition files**
+* Go back to **Create Ignition files**
 
 
 ### Debug
