@@ -1,0 +1,81 @@
+<ProductSectionList xmlns="http://www.vmware.com/vcloud/v1.5" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData" xmlns:common="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:vmw="http://www.vmware.com/schema/ovf" xmlns:vmext="http://www.vmware.com/vcloud/extension/v1.5" xmlns:ovfenv="http://schemas.dmtf.org/ovf/environment/1" xmlns:ns9="http://www.vmware.com/vcloud/versions" href="https://169.50.123.90/api/vApp/vm-8beaa0f3-ec05-4614-bb8a-a9b3f54d2575/productSections/" type="application/vnd.vmware.vcloud.productSections+xml">
+    <Link rel="edit" href="https://169.50.123.90/api/vApp/vm-8beaa0f3-ec05-4614-bb8a-a9b3f54d2575/productSections/" type="application/vnd.vmware.vcloud.productSections+xml"/>
+    <ovf:ProductSection ovf:class="" ovf:instance="" ovf:required="true">
+        <ovf:Info>Information about the installed software</ovf:Info>
+        <ovf:Product>LB</ovf:Product>
+        <ovf:Vendor>rhcos</ovf:Vendor>
+        <ovf:Version>LB</ovf:Version>
+        <ovf:Property ovf:key="guestinfo.config.bootstrap.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###BOOTSTRAPIP###">
+            <ovf:Label>guestinfo.config.bootstrap.ip</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.master0.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###MASTER0IP###">
+            <ovf:Label>guestinfo.config.master0.ip</ovf:Label>
+            <ovf:Description>Inline Ignition config data</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.master1.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###MASTER1IP###">
+            <ovf:Label>guestinfo.config.master1.ip</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.master2.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###MASTER2IP###">
+            <ovf:Label>guestinfo.config.master2.ip</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.worker0.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###WORKER0IP###">
+            <ovf:Label>guestinfo.config.worker0.ip</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.worker1.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###WORKER1IP###">
+            <ovf:Label>guestinfo.config.worker1.ip</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.worker2.ip" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###WORKER2IP###">
+            <ovf:Label>guestinfo.config.worker2.ip</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.master0.fqdn" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###MASTER0FQDN###">
+            <ovf:Label>guestinfo.config.master0.fqdn</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.master1.fqdn" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###MASTER1FQDN###">
+            <ovf:Label>guestinfo.config.master1.fqdn</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.master2.fqdn" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###MASTER2FQDN###">
+            <ovf:Label>guestinfo.config.master2.fqdn</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.worker0.fqdn" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###WORKER0FQDN###">
+            <ovf:Label>guestinfo.config.worker0.fqdn</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.worker1.fqdn" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###WORKER1FQDN###">
+            <ovf:Label>guestinfo.config.worker1.fqdn</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.worker2.fqdn" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###WORKER2FQDN###">
+            <ovf:Label>guestinfo.config.worker2.fqdn</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.publicdns" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###DNS###">
+            <ovf:Label>guestinfo.config.publicdns</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.ipaddress" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###IPADDRESS###">
+            <ovf:Label>guestinfo.config.ipaddress</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.netmask" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###NETMASK###">
+            <ovf:Label>guestinfo.config.netmask</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.gateway" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###GATEWAY###">
+            <ovf:Label>guestinfo.config.gateway</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+        <ovf:Property ovf:key="guestinfo.config.sshkey" ovf:password="false" ovf:type="string" ovf:userConfigurable="true" ovf:value="###SSHKEY###">
+            <ovf:Label>guestinfo.config.sshkey</ovf:Label>
+            <ovf:Description>DNS LB DATA</ovf:Description>
+        </ovf:Property>
+    </ovf:ProductSection>
+</ProductSectionList>
