@@ -240,7 +240,7 @@ netstat -aunp
 udp        0      0 0.0.0.0:53              0.0.0.0:*                           1202/dnsmasq         
 ```
 
-**Note: the following verifications need to be done after running the dns.sh script.**
+**Note: the following verifications need to be done after running the add_dns.sh script.( in the Update DNS step below)**
 
 * Verify that DNS lookups are good, and going to the right SERVER:
 ```
