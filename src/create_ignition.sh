@@ -7,7 +7,7 @@ cat $OPENSHIFT/install-config.yaml.templ| sed -e "s/BASEDOMAIN/$BASEDOMAIN/" -e 
 echo "pullSecret: '`cat $PULLSECRET`'" >> $IGNITIONDIR/install-config.yaml
 echo "sshkey: '`cat ssh_key.pub`'" >> $IGNITIONDIR/install-config.yaml
 cp $IGNITIONDIR/install-config.yaml .
-$OPENSHIFT/openshift-install_45 create ignition-configs --dir=$IGNITIONDIR
+$OPENSHIFT/openshift-install create ignition-configs --dir=$IGNITIONDIR
 mkdir -p $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/
 #######BOOTSTRAP STATIC IP
 echo bootstrap.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
