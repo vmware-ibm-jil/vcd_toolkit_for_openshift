@@ -1,4 +1,5 @@
 # Switching the org and vdc so that one can create vapps and find networks
+# added Network to vApp and removed Quotations from depends_on due to deprecated function in terraform
 
 provider "vcd" {
   user                 = "###VCDUSR###"
@@ -10,6 +11,16 @@ provider "vcd" {
   logging              = true
 }
 
+resource "vcd_vapp_org_network" "vappOrgNet" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+
+  vapp_name         = "###VCDVAPP###"
+
+ # Comment below line to create an isolated vApp network
+  org_network_name  = "ocpnet"
+  depends_on = [###VCDVAPP###]
+}
 
 
 resource "vcd_vapp" "###VCDVAPP###" {
@@ -53,7 +64,7 @@ resource "vcd_vapp_vm" "bootstrap" {
     storage_profile    = "4 IOPS/GB"
   }
 
-  depends_on = ["vcd_vapp_vm.loadbalancer"]
+  depends_on = [vcd_vapp_vm.loadbalancer]
 }
 
 resource "vcd_vapp_vm" "master" {
@@ -86,7 +97,7 @@ resource "vcd_vapp_vm" "master" {
     storage_profile    = "4 IOPS/GB"
   }
 
-  depends_on = ["vcd_vapp_vm.worker"]
+  depends_on = [vcd_vapp_vm.worker]
 }
 resource "vcd_vapp_vm" "worker" {
   org          = "###VCDORG###"
@@ -119,7 +130,7 @@ resource "vcd_vapp_vm" "worker" {
     storage_profile    = "4 IOPS/GB"
   }
 
-  depends_on = ["vcd_vapp_vm.bootstrap"]
+  depends_on = [vcd_vapp_vm.bootstrap]
 }
 
 resource "vcd_vapp_vm" "loadbalancer" {

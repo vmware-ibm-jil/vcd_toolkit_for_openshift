@@ -54,7 +54,7 @@ Create a network where we will install VMs and OCP.
     - Shared - leave it toggled off
   - Edge:  
     - connect to your ESG
-    - Interface Type:  **Distributed**
+    - Interface Type:  **Internal**  (changed from **Distributed** temporarily due to a bug in VMWare. Not sure if its really necessary to change back? )
     - Guest Vlan Allowed: **no**
   - Static IP Pools:
      - convenient for establishing a range that you manually assign from.   **172.16.0.10 - 172.16.0.18**
@@ -205,13 +205,23 @@ After the VM is created, connect it to your network:
   * You need to enable RedHat entitlement so that you can use yum.
   * ssh to bastion and execute the [steps in bullet 3 here](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-public-cat-rhel) to register the VM
 
+#### Install DNS - based on dnsmasq
+    * `yum install dnsmasq`
+
+    * DHCP service must be turned off by adding the following entry in `/etc/dnsmasq.conf` for each interface and temporarily add outside world so you can clone repository, etc.:
+  ```
+  no-dhcp-interface=ens192
+  server=9.9.9.9
+  ```
+    * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
+    * `systemctl start dnsmasq.service`
 #### Install preReqs of the Terraform  and SimpleHTTP server:
   * `yum install uzip`
   * `yum install python3`
-  * `wget https://releases.hashicorp.com/terraform/0.12.17/terraform_0.12.17_linux_amd64.zip`
-  * `unzip terraform_0.12.17_linux_amd64.zip -d /usr/local/bin/`
-You also need the [Terraform VMware vCloud Director Provider](https://www.terraform.io/docs/providers/vcd/index.html).
-TODO I can't find the download link :) Source is [here](https://github.com/vmware/terraform-provider-vcd)
+  * `yum install -y yum-utils`
+  * `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
+  * `yum install terraform`
+
 
 #### Update firewall
 Allow HTTP(port 80) and DNS(port 53) traffic into bastion.  Issue the following commands.  You should get `success` message from each:
@@ -223,18 +233,6 @@ firewall-cmd --reload
 ```
 [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
-#### Install DNS - based on dnsmasq
-  * `yum install dnsmasq`
-
-  * DHCP service must be turned off by adding the following entry in `/etc/dnsmasq.conf` for each interface and temporarily add outside world so you can clone repository, etc.:
-```
-no-dhcp-interface=ens192
-server=9.9.9.9
-```
-  * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
-  * `systemctl start dnsmasq.service`
-
-`netstat -aunp` should show you that dnsmasq DNS is listening on 53.  It should NOT be listening on port 67 (DHCP)
 ```
 netstat -aunp
  ...
@@ -254,22 +252,7 @@ SERVER: 127.0.0.1#53(127.0.0.1)
 ```
 
 * Verify that your SRV records are in DNS:
-```
-dig _etcd-server-ssl._tcp.myprefix.my.com SRV
-
-;; ANSWER SECTION:
-_etcd-server-ssl._tcp.myprefix.my.com. 0 IN SRV 10 0 2380 etcd-1.myprefix.my.com.
-_etcd-server-ssl._tcp.myprefix.my.com. 0 IN SRV 10 0 2380 etcd-0.myprefix.my.com.
-_etcd-server-ssl._tcp.myprefix.my.com. 0 IN SRV 10 0 2380 etcd-2.myprefix.my.com.
-
-;; ADDITIONAL SECTION:
-etcd-0.myprefix.my.com. 0	IN	A	172.16.0.21
-etcd-2.myprefix.my.com. 0	IN	A	172.16.0.23
-etcd-1.myprefix.my.com. 0	IN	A	172.16.0.22
-
-;; Query time: 0 msec
-;; SERVER: 127.0.0.1#53(127.0.0.1)
-```
+`
 To check what lines are active in dnsmasq.conf:
 
 ```
@@ -303,7 +286,7 @@ Now the toolkit is installed in `/usr/local/openshift`
     - TODO: allow for flexible number of worker nodes. Changes would have to occur in env.sh.template, create_ignition.sh, deploy.sh, LBDNS.xml, main.tf.withProperties and vcd.sh
     - TODO: make scripts generic to OCP versions allowing user to specify version and change create_ignition.sh to use appropriate installer version binary
 
-### Install OpenShift
+#### Install OpenShift
 
 #### Update env.sh:
 `env.sh` will contain all the configuration for your cluster.
@@ -322,8 +305,12 @@ TODO document where we got this, and why it needs to be in this dir rather than 
 #### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
 * Edit create_ignition.sh and  change line 10 to point to the correct openshift-install binary
-   - TODO The OpenShift installer binary: `openshift-install` appears to be unique to the version of OpenShift. We downloaded both the openshift-install 4.4 and 4.5 binaries to /usr/local/openshift/ with unique names and we edit the install script to point to the correct installer.  There should be a better way to do this...
-all name
+* Download the appropriate OpenShift Install and client code from here:
+[Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html)
+
+   _- TODO The OpenShift installer binary: `openshift-install` appears to be unique to the version of OpenShift. We downloaded both the openshift-install 4.4 and 4.5 binaries to /usr/local/openshift/ with unique names and we edit the install script to point to the correct installer.  There should be a better way to do this...
+all name_
+
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
 * setup passwordless SSH:  create_ignition generated ssh keys and put the public key into the OCP `install-config.yaml`.  The OCP install process will propagate the public key to the bootstrap, masters, workers, and loadbalancer VMs.  Userid to ssh to will be `core`.   Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
 ```
@@ -331,6 +318,8 @@ cp ssh_key /root/.ssh/id_rsa
 cp ssh_key.pub /root/.ssh/id_rsa.pub
 ```
 At this point you have created a set of configuration files in /home/youhome/$PREFIXTODOMAIN/$IGNITIONDIR
+
+  [6daf02c4]: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/ "Red Hat Download Site"
 
 
 #### Update DNS:
