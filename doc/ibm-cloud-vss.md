@@ -32,7 +32,7 @@ You order **VMware Solutions Shared** in IBM Cloud.  When you order a new instan
 We need a catalog of VM images to use for our OpenShift VMs.
 Fortunately IBM provides a set of images that are tailored to work for OpenShift deployments.
 To browse the available images:
-* From your vCloud Director console, click on **Libraries** in the header menu. 
+* From your vCloud Director console, click on **Libraries** in the header menu.
 * select *vApp Templates*
 * There are 3 images in the list that we will be using:
   * rhcos OpenShift 4.5.6 - OpenShift CoreOS template
@@ -41,7 +41,7 @@ To browse the available images:
 * If you want to add your own Catalogs and more, see the [documentation about catalogs](#about-catalogs)
 
 ## Networking
-Much of the following is covered in general in the [Operator Guide/Networking](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-networking). Below is the specific network configuration required. 
+Much of the following is covered in general in the [Operator Guide/Networking](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-networking). Below is the specific network configuration required.
 
 ### Create private networks
 
@@ -56,8 +56,8 @@ Create a network where we will install VMs and OCP.
     - connect to your ESG
     - Interface Type:  **Distributed**
     - Guest Vlan Allowed: **no**
-  - Static IP Pools: 
-     - convenient for establishing a range that you manually assign from.   **172.16.0.10 - 172.16.0.18** 
+  - Static IP Pools:
+     - convenient for establishing a range that you manually assign from.   **172.16.0.10 - 172.16.0.18**
   - DNS: Use Edge DNS -  toggled off.  Set primary DNS to 172.16.0.10 which is where we will put the Bastion VM.  This is the DNS that will be used by default for VMs created with static or pool based IP addresses.
 
 
@@ -122,9 +122,9 @@ We need to configure DNAT so that we have ssh access the bastion VM from public 
   - We will use  172.16.0.10 address for bastion VM
 1. Firewall Rule
     - Firewall tab and select '+' to add
-      - Name: **bastion** 
+      - Name: **bastion**
       - Destination: Select the 'IP'
-        - enter the `chosen public/sub-allocated IP` 
+        - enter the `chosen public/sub-allocated IP`
       - Service: Protocol: `TCP` Source port: `any` Destination port: `22`
      - Select: 'Save changes'
 
@@ -132,7 +132,7 @@ We need to configure DNAT so that we have ssh access the bastion VM from public 
     - NAT tab and select '+DNAT RULE' in the NAT44 Rules
       - Applied On: **your-tenant-external**
       - Original Source IP/Range: enter the `chosen public/sub-allocated IP`
-      - Translated Source IP/Range: **172.16.0.10** 
+      - Translated Source IP/Range: **172.16.0.10**
       - Description: **access to bastion host**
 
 #### Inbound config to OCP Console
@@ -140,9 +140,9 @@ We need to configure DNAT so that we have https access the console from public i
   - Choose an available IP Address from the set of `public/sub-allocated` IPs for the VCD datacenter instance.
 1. Firewall Rule
     - Firewall tab and select '+' to add
-      - Name: **ocpconsole** 
+      - Name: **ocpconsole**
       - Destination: Select the 'IP'
-        - enter the `chosen public/sub-allocated IP` 
+        - enter the `chosen public/sub-allocated IP`
       - Service: Protocol: `any`
      - Select: 'Save changes'
 
@@ -150,17 +150,17 @@ We need to configure DNAT so that we have https access the console from public i
     - NAT tab and select '+DNAT RULE' in the NAT44 Rules
       - Applied On: **your-tenant-external**
       - Original Source IP/Range: enter the `chosen public/sub-allocated IP`
-      - Translated Source IP/Range: **IP of Load Balancer** 
+      - Translated Source IP/Range: **IP of Load Balancer**
       - Description: **access to ocp console**
 
 
 #### Setup DHCP
 * We will use our Edge gateway to provide DHCP services.  On the Edge > DHCP, click + and configure DHCP with the following settings:
     ```
-    IPRange: 172.16.0.150-172.16.0.245 
+    IPRange: 172.16.0.150-172.16.0.245
     Primary Nameserver: 172.16.0.10 (bastion)
-    AutoConfig DNS: no 
-    Gateway: 172.16.0.1 
+    AutoConfig DNS: no
+    Gateway: 172.16.0.1
     Netmask: 255.255.255.0
     Lease: 86400
     ```
@@ -173,7 +173,7 @@ We need to configure DNAT so that we have https access the console from public i
 ```
 Starting Nmap 6.40 ( http://nmap.org ) at 2020-08-25 15:38 EDT
 Pre-scan script results:
-| broadcast-dhcp-discover: 
+| broadcast-dhcp-discover:
 |   IP Offered: 172.16.0.151
 |   DHCP Message Type: DHCPOFFER
 |   Server Identifier: 169.254.1.73
@@ -188,7 +188,7 @@ Pre-scan script results:
 The Bastion VM hosts the vcd_toolkit_for_openshift and  is the VM where we launch installations from.  The VM also hosts **DNS service**, and an **HTTP server** through which the Ignition configuration files are provided to Bootstrap during installation.
 
 Go to Virtual Machines > **New VM**
-Name: **bastion** 
+Name: **bastion**
   - **From Template**
   - Select **vm-redhat7**
 
@@ -204,7 +204,7 @@ After the VM is created, connect it to your network:
 #### Enable Redhat entitlement
   * You need to enable RedHat entitlement so that you can use yum.
   * ssh to bastion and execute the [steps in bullet 3 here](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-public-cat-rhel) to register the VM
-     
+
 #### Install preReqs of the Terraform  and SimpleHTTP server:
   * `yum install uzip`
   * `yum install python3`
@@ -223,16 +223,17 @@ firewall-cmd --reload
 ```
 [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
-#### Install DNS - based on dnsmasq 
+#### Install DNS - based on dnsmasq
   * `yum install dnsmasq`
- 
-  * DHCP service must be turned off by adding the following entry in `/etc/dnsmasq.conf` for each interface: 
+
+  * DHCP service must be turned off by adding the following entry in `/etc/dnsmasq.conf` for each interface and temporarily add outside world so you can clone repository, etc.:
 ```
 no-dhcp-interface=ens192
+server=9.9.9.9
 ```
   * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
   * `systemctl start dnsmasq.service`
-  
+
 `netstat -aunp` should show you that dnsmasq DNS is listening on 53.  It should NOT be listening on port 67 (DHCP)
 ```
 netstat -aunp
@@ -270,7 +271,7 @@ etcd-1.myprefix.my.com. 0	IN	A	172.16.0.22
 ;; SERVER: 127.0.0.1#53(127.0.0.1)
 ```
 To check what lines are active in dnsmasq.conf:
-    
+
 ```
     grep -v -e '^#' -e '^$'  /etc/dnsmasq.conf
     server=8.8.8.8
@@ -283,7 +284,7 @@ To check what lines are active in dnsmasq.conf:
     srv-host="_etcd-server-ssl._tcp.myprefix.my.com",etcd-0.myprefix.my.com,2380,10,0
     srv-host="_etcd-server-ssl._tcp.myprefix.my.com",etcd-1.myprefix.my.com,2380,10,0
     srv-host="_etcd-server-ssl._tcp.myprefix.my.com",etcd-2.myprefix.my.com,2380,10,0
-    
+
 ```
 
 #### Start HTTP Server
@@ -306,8 +307,8 @@ Now the toolkit is installed in `/usr/local/openshift`
 
 #### Update env.sh:
 `env.sh` will contain all the configuration for your cluster.
-See `this repo`/config/env.sh which is self documenting. 
-At this point you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN. 
+See `this repo`/config/env.sh which is self documenting.
+At this point you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN.
 The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 * `mkdir /home/yourhome/$PREFIXTODOMAIN`
 * `cd /home/yourHome/$PREFIXTODOMAIN`  
@@ -333,13 +334,13 @@ At this point you have created a set of configuration files in /home/youhome/$PR
 
 
 #### Update DNS:
-* On 1st run only:  Execute `add_dns.sh` 
+* On 1st run only:  Execute `add_dns.sh`
       This will add the content of `NEEDED_DNS_ENTRIES` into `/etc/hosts` and `NEEDED_SVC_ENTRIES` into `/etc/dnsmasq.conf`.  It fails with a `sed -e` error but seems to work anyway.
 * On subsequent runs (i.e. after you run `terraform destroy` all):  Change `/etc/hosts` and `/etc/dnsmasq.conf` manually
 * restart dnsmasq:
 `service dnsmasq restart`    
- 
- 
+
+
 #### Create the VMs:
 - Execute `deploy.sh > main.tf`. This creates the terraform tf
 
@@ -357,7 +358,7 @@ At this point you have created bootstrap, loadbalancer, 3 master, and 3 worker V
 #### Add custom properties to the VMs
 We need to add properties to the VMs which are used for further configuration of the VMs during the installation process.
 
-- Run `vcd.sh`. This will add a "ProductSectionList" containing 2 properties: `guestinfo.ignition.config.data`  information to the VApp Template for each CoreOS VM, and `guestinfo.ignition.config.data.encoding` with a value of `base64`. 
+- Run `vcd.sh`. This will add a "ProductSectionList" containing 2 properties: `guestinfo.ignition.config.data`  information to the VApp Template for each CoreOS VM, and `guestinfo.ignition.config.data.encoding` with a value of `base64`.
 It will also add other properties to bootstrap and loadbalancer.
 - To verify that vcd.sh worked, run `vcd_get_after_vcd_put.sh` which will GET all the config that vcd.sh POSTed.  The script writes files to /tmp
    - Verify the files in /tmp.  There should be correct ignition data in the Product Section in each CoreOS VApp template. (Hint: run base64 -d on the encoded parts to see what is encoded)
@@ -366,9 +367,9 @@ It will also add other properties to bootstrap and loadbalancer.
 Once you power on all the VMs there is an intricate dance between all the VMs which results in a completed install. You play a manual role as well by approving pending certificates.
 
 - power on all the VMs in the VAPP.  Alternatively:
-- change terraform template to power on the VMs: run `sed -i "s/false/true/" main.tf` 
+- change terraform template to power on the VMs: run `sed -i "s/false/true/" main.tf`
 - To power on the VMs run `terraform apply --auto-approve`
-- cd to authentication directory: `cd <clusternameDir>/auth` 
+- cd to authentication directory: `cd <clusternameDir>/auth`
     This directory contains both the cluster config and the kubeadmin password for UI login
 - export KUBECONFIG=`pwd`/kubeconfig
 - Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
@@ -377,7 +378,7 @@ oc get nodes
  NAME                                  STATUS   ROLES    AGE   VERSION
  master-00.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-01.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
- master-02.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af36 
+ master-02.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af36
 ```
 - Wait until `oc get csr` shows no new 'Pending' Conditions for about 10 mins. This took about 20 mins
 - Run `oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve`  to approve the 'Pending' certificates
@@ -428,14 +429,14 @@ oc get routes console -n openshift-console
 ```
 
 - Create Firewall Rule and DNAT using a Public IP in the Edge Gateway in VCD console. TODO instructions
- 
-- Add name resolution to direct console to the Public IP in /etc/hosts on the client that will login to the Console UI. 
+
+- Add name resolution to direct console to the Public IP in /etc/hosts on the client that will login to the Console UI.
   As an example:
 ```
   1.2.3.4 console-openshift-console.apps.ocp44-myprefix.my.com
   1.2.3.4 oauth-openshift.apps.ocp44-myprefix.my.com
 ```
- 
+
 - From a browser, connect to the "console host" from the `oc get routes` command with https. You will need to accept numerous security warnings as the deployment is using self-signed certificates.
 
 **That's it!  You have an OpenShift Cluster ready to go enjoy!**
@@ -448,7 +449,7 @@ Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and st
    mv /home/yourHome/#PREFIXTODOMAIN/ some-backup-dir               # backup everything generated in last run
    mkdir /home/yourHome/#PREFIXTODOMAIN                             # new deployment directory
    cp some-backup-dir/env.sh /home/yourHome/#PREFIXTODOMAIN/        # env.sh contains all the needed configuration
-   cp -r some-backup-dir/.terraform//home/yourHome/#PREFIXTODOMAIN/ 
+   cp -r some-backup-dir/.terraform//home/yourHome/#PREFIXTODOMAIN/
 ```
 * TODO can we put .terraform (VCD Provider) into /usr/local/openshift/:
 * Go back to **Create Ignition files**
@@ -466,9 +467,9 @@ as of now we just power down the VMs which is not a good approach.  We need to a
 ## Resources and References
 
 * The overall approach is a  **Bare Metal Install**, also known as UPI - User provisioned Infrastructure, along with static IPs. These 3 RedHat blogs describe the overall approach:
-  - [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart) 
+  - [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart)
   - [Install with Static IPs](https://www.openshift.com/blog/openshift-4-2-vsphere-install-with-static-ips)
-  - [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart) 
+  - [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart)
 * RedHat doc for **Installing Openshift on VSphere**  https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere.html#installation-installing-bare-metal_installing-vsphere
 * [**Troubleshooting OpenShift Installations**](https://docs.openshift.com/container-platform/4.5/support/troubleshooting/troubleshooting-installations.html)
 * Operating VMware Solutions Shared - Knowledge Center:  https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide
@@ -484,4 +485,3 @@ as of now we just power down the VMs which is not a good approach.  We need to a
 * [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 * [firewall-cmd examples](https://www.thegeekdiary.com/5-useful-examples-of-firewall-cmd-command/)
 * TLS handshake timeout - how to debug: https://github.com/openshift/installer/issues/2687
-
