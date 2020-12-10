@@ -1,6 +1,16 @@
 # Switching the org and vdc so that one can create vapps and find networks
 # added Network to vApp and removed Quotations from depends_on due to deprecated function in terraform
 
+# This section pulls down the current version of the vcd provider
+terraform {
+  required_providers {
+    vcd = {
+      source = "vmware/vcd"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
 provider "vcd" {
   user                 = "###VCDUSR###"
   password             = "###VCDPASS###"
@@ -37,7 +47,7 @@ resource "vcd_vapp_vm" "bootstrap" {
   vdc          = "###VCDVDC###"
 
 
-  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  vapp_name     = "vcd_vapp.###VCDVAPP###.name"
   name          = "bootstrap"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###OSTEMPLATE###"
@@ -71,7 +81,7 @@ resource "vcd_vapp_vm" "master" {
 
   count = 3
 
-  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  vapp_name     = "vcd_vapp.###VCDVAPP###.name"
   name          = "master-${count.index}"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###OSTEMPLATE###"
@@ -103,7 +113,7 @@ resource "vcd_vapp_vm" "worker" {
 
   count = 3
 
-  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  vapp_name     = "vcd_vapp.###VCDVAPP###.name"
   name          = "worker-${count.index}"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###OSTEMPLATE###"
@@ -136,7 +146,7 @@ resource "vcd_vapp_vm" "loadbalancer" {
   vdc          = "###VCDVDC###"
 
 
-  vapp_name     = "${vcd_vapp.###VCDVAPP###.name}"
+  vapp_name     = "vcd_vapp.###VCDVAPP###.name"
   name          = "loadbalancer"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###LBTEMPLATE###"
