@@ -304,9 +304,15 @@ TODO document where we got this, and why it needs to be in this dir rather than 
 
 #### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
+* Retreive a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) `Note: Don't download the installation and client code from this page unless you are installing the current version of OpenShift (currently 4.6.x)`
 * Edit create_ignition.sh and  change line 10 to point to the correct openshift-install binary
 * Download the appropriate OpenShift Install and client code from here:
-[Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html)
+[Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html). Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
+
+    Example:
+
+    `wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-install-linux-4.5.16.tar.gz
+    wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.16.tar.gz`
 
    _- TODO The OpenShift installer binary: `openshift-install` appears to be unique to the version of OpenShift. We downloaded both the openshift-install 4.4 and 4.5 binaries to /usr/local/openshift/ with unique names and we edit the install script to point to the correct installer.  There should be a better way to do this...
 all name_
