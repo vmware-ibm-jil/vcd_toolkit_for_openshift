@@ -212,6 +212,10 @@ After the VM is created, connect it to your network:
   ```
   no-dhcp-interface=ens192
   server=9.9.9.9
+  listen-address=127.0.0.1
+  interface=ens192
+  interface=lo
+
   ```
     * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
     * `systemctl start dnsmasq.service`
@@ -304,8 +308,10 @@ TODO document where we got this, and why it needs to be in this dir rather than 
 
 #### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
-* Retreive a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) `Note: Don't download the installation and client code from this page unless you are installing the current version of OpenShift (currently 4.6.x)`
-* Edit create_ignition.sh and  change line 10 to point to the correct openshift-install binary
+* Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place in `/tmp/pull-secret.txt`
+
+  **Note:** Don't download the installation and client code from this page unless you are installing the current version of OpenShift (currently 4.6.x)
+* _Step not necessary as this was removed by sdl. createignition.sh and  change line 10 to point to the correct openshift-install binary_
 * Download the appropriate OpenShift Install and client code from here:
 [Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html). Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
 
@@ -318,7 +324,7 @@ TODO document where we got this, and why it needs to be in this dir rather than 
 all name_
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
-* setup passwordless SSH:  create_ignition generated ssh keys and put the public key into the OCP `install-config.yaml`.  The OCP install process will propagate the public key to the bootstrap, masters, workers, and loadbalancer VMs.  Userid to ssh to will be `core`.   Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
+*  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
 ```
 cp ssh_key /root/.ssh/id_rsa
 cp ssh_key.pub /root/.ssh/id_rsa.pub
@@ -344,7 +350,7 @@ At this point you have created a set of configuration files in /home/youhome/$PR
 
 This should complete with:
 ```
-Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 10 added, 0 changed, 0 destroyed.
 ```
 
 At this point you have created bootstrap, loadbalancer, 3 master, and 3 worker VMs!  They are powered off.
@@ -366,7 +372,9 @@ Once you power on all the VMs there is an intricate dance between all the VMs wh
 - To power on the VMs run `terraform apply --auto-approve`
 - cd to authentication directory: `cd <clusternameDir>/auth`
     This directory contains both the cluster config and the kubeadmin password for UI login
-- export KUBECONFIG=`pwd`/kubeconfig
+- export KUBECONFIG= clusternameDir/auth/kubeconfig
+
+  `Example: export KUBECONFIG=/root/stuocpvmshared1/stuocpvmshared1.stulipshires.com/auth/kubeconfig`
 - Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
 ```
 oc get nodes
