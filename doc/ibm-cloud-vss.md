@@ -317,11 +317,12 @@ TODO document where we got this, and why it needs to be in this dir rather than 
 
     Example:
 
-    `wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-install-linux-4.5.16.tar.gz
-    wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.16.tar.gz`
+  ```
+  wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-install-linux-4.5.16.tar.gz
 
-   _- TODO The OpenShift installer binary: `openshift-install` appears to be unique to the version of OpenShift. We downloaded both the openshift-install 4.4 and 4.5 binaries to /usr/local/openshift/ with unique names and we edit the install script to point to the correct installer.  There should be a better way to do this...
-all name_
+  wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.16.tar.gz
+```
+
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
 *  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
