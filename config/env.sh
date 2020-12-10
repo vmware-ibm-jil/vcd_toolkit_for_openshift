@@ -1,7 +1,7 @@
 ####### Set the following Environment Variables:
 #
 # our installation driver VM (called bastion) will also host HTTP Server (for ignition files) and local DNS resolver:
-HTTPIP=172.16.0.10    # HTTP server on bastion VM where the ignition files will be retrieved from 
+HTTPIP=172.16.0.10    # HTTP server on bastion VM where the ignition files will be retrieved from
 DNS=172.16.0.10       # the local DNS resolver (DNSMasq) on bastion
 HTTPPORT=80           # HTTP server port the ignition files will be retrieved from
 
@@ -15,7 +15,7 @@ WORKER1=172.16.0.25   # static IP of worker VM
 WORKER2=172.16.0.26   # STATIC IP of worker VM
 NETMASK=255.255.255.0 # /24 netmask for all above IP
 GATEWAY=172.16.0.1    # getway of network for all above IP
-PUBLICDNS=8.8.8.8     # DNS where PUBLIC names can be resolved
+PUBLICDNS=172.16.0.10     # DNS where PUBLIC names can be resolved
 
 #======== OpenShift and  install-config.yaml related parameters ==========
 OPENSHIFT=/usr/local/openshift                          # location of the VCD Toolkit for OpenShift scripts and binaries
@@ -26,7 +26,7 @@ PULLSECRET=/tmp/pull-secret.txt  # file location of pull secret downloaded From 
 
 #======== Local environment where the deployment is driven from ==========
 BASEDOMAIN=my.com                  # domain to use for all cluster nodes
-PREFIXTODOMAIN=myprefix            # prefix which will be prepended to BASEDOMAIN. Lower case alfa-num only.  This will also be the directory where we will deploy from. For example /home/<user>/$PREFIXTODOMAIN/ 
+PREFIXTODOMAIN=myprefix            # prefix which will be prepended to BASEDOMAIN. Lower case alfa-num only.  This will also be the directory where we will deploy from. For example /home/<user>/$PREFIXTODOMAIN/
 DOMAIN=$PREFIXTODOMAIN.$BASEDOMAIN # for example myprefix.my.com. Lower case alfa-num only. This will also be the directory where deployment artifacts are generated to
 MASTERNAME=master                  # prefix of master VM names.  Must be "master". fqdn will be, for example, master-00.<PREFIXTODOMAIN>.<BASDDOMAIN>
 WORKERNAME=worker                  # prefix of worker VM names.  Must be "worker". fqdn will be, for example, worker-00.<PREFIXTODOMAIN>.<BASDDOMAIN>
