@@ -278,7 +278,7 @@ The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve thei
 
 #### Install VCD Toolkit
 * clone this repo
-* `cp -r <this repo>/src/ /usr/local/openshift/`
+* `cp -r <this repo>/src/* /usr/local/openshift/`
 
 Now the toolkit is installed in `/usr/local/openshift`
 
