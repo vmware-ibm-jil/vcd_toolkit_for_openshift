@@ -302,10 +302,6 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 * `cp this-repo/config/env.sh /home/yourHome/$PREFIXTODOMAIN`   
 * Fill in the variables in env.sh as documented in env.sh itself.
 
-#### Configure Terraform VCD Provider:
-*  You need the **VCD Terraform Provider** (plugin) in the local dir: `tar -xvf /root/terraform-plugin.tar .`
-TODO document where we got this, and why it needs to be in this dir rather than /usr/local/openshift/.
-
 #### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
 * Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place in `/tmp/pull-secret.txt`
