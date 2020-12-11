@@ -98,7 +98,7 @@ cd ..
 echo $STORAGENAME-02.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
 cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE2/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
 cd $IGNITIONDIR
-$FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-00-static.ign
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-02-static.ign
 cd ..
 #######################
 HTTPURL=http://$HTTPIP`pwd`/$IGNITIONDIR/bootstrap-static.ign
