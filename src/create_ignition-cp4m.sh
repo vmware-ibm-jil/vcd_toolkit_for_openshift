@@ -65,19 +65,19 @@ cd $IGNITIONDIR
 $FILETRANSPILER -i worker.ign  -f bootstrap -o $WORKERNAME-02-static.ign
 cd ..
 ########STORAGE0 STATIC IP
-echo $STORAGE-00.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+echo $STORAGENAME-00.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
 cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE0/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
 cd $IGNITIONDIR
 $FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-00-static.ign
 cd ..
 ########STORAGE1 STATIC IP
-echo $STORAGE-01.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+echo $STORAGENAME-01.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
 cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE1/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
 cd $IGNITIONDIR
 $FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-01-static.ign
 cd ..
 ########STORAGE2 STATIC IP
-echo $STORAGE-02.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+echo $STORAGENAME-02.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
 cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE2/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
 cd $IGNITIONDIR
 $FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-00-static.ign
