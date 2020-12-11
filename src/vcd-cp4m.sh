@@ -111,6 +111,40 @@ mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/worker-0.custom_property.xml
   mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/worker-2.custom_property.xml
       fi
 
+      grep $i $VMLIST|grep worker-3 > /dev/null 2>&1
+      if [ $? = 0 ]
+        then
+        echo worker-3 FOUND
+        cp $OPENSHIFT/custom_property.xml $IGNITIONDIR/custom_property.xml
+        a=`cat $IGNITIONDIR/$WORKERNAME-03.64`
+        sed -i "s/###DATA###/$a/" $IGNITIONDIR/custom_property.xml
+        curl -i -k -H "Accept: application/*+xml;version=31.0" -H "x-vcloud-authorization: $auth" -H "Content-Type: application/vnd.vmware.vcloud.productSections+xml" -X PUT  $i/productSections -d "@$IGNITIONDIR/custom_property.xml"
+        echo $i
+    mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/worker-3.custom_property.xml
+        fi
+        grep $i $VMLIST|grep worker-4 > /dev/null 2>&1
+        if [ $? = 0 ]
+          then
+          echo worker-4 FOUND
+          cp $OPENSHIFT/custom_property.xml $IGNITIONDIR/custom_property.xml
+          a=`cat $IGNITIONDIR/$WORKERNAME-04.64`
+          sed -i "s/###DATA###/$a/" $IGNITIONDIR/custom_property.xml
+          curl -i -k -H "Accept: application/*+xml;version=31.0" -H "x-vcloud-authorization: $auth" -H "Content-Type: application/vnd.vmware.vcloud.productSections+xml" -X PUT  $i/productSections -d "@$IGNITIONDIR/custom_property.xml"
+          echo $i
+      mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/worker-4.custom_property.xml
+          fi
+          grep $i $VMLIST|grep worker-5 > /dev/null 2>&1
+          if [ $? = 0 ]
+            then
+            echo worker-5 FOUND
+            cp $OPENSHIFT/custom_property.xml $IGNITIONDIR/custom_property.xml
+            a=`cat $IGNITIONDIR/$WORKERNAME-05.64`
+            sed -i "s/###DATA###/$a/" $IGNITIONDIR/custom_property.xml
+            curl -i -k -H "Accept: application/*+xml;version=31.0" -H "x-vcloud-authorization: $auth" -H "Content-Type: application/vnd.vmware.vcloud.productSections+xml" -X PUT  $i/productSections -d "@$IGNITIONDIR/custom_property.xml"
+            echo $i
+        mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/worker-5.custom_property.xml
+            fi
+
       grep $i $VMLIST|grep storage-0 > /dev/null 2>&1
       if [ $? = 0 ]
         then
