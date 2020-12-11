@@ -147,7 +147,7 @@ resource "vcd_vapp_vm" "storage" {
   count = 3
 
   vapp_name     = vcd_vapp.###VCDVAPP###.name
-  name          = "worker-${count.index}"
+  name          = "storage-${count.index}"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###OSTEMPLATE###"
   memory        = "65536"
