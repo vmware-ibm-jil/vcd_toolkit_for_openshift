@@ -446,6 +446,52 @@ storage                                    4.5.22    True        False         F
 
 - From a browser, connect to the "console host" from the `oc get routes` command with https. You will need to accept numerous security warnings as the deployment is using self-signed certificates.
 
+
+### One last step you must complete in order to ensure the stability of your cluster!
+Log in to the Load Balancer form the Bastion   
+`ssh core@172.16.0.19`
+
+**Note: In order for this section to work, you need to have v2 (as denoted in the comments) on your machine when it first booted. This requires a version newer than LBOpenshift-0.1 dated 10/06/2020**  
+
+`vi /etc/haproxy/haproxy.cfg`   
+and comment out the lines that contain `172.16.0.20`
+```
+backend 6443
+        balance roundrobin
+        mode tcp
+        server vm0 172.16.0.20:6443 check
+        server vm1 172.16.0.21:6443 check
+        server vm2 172.16.0.22:6443 check
+        server vm3 172.16.0.23:6443 check
+backend 22623
+        balance roundrobin
+        mode tcp
+        server vm0 172.16.0.20:22623 check
+        server vm1 172.16.0.21:22623 check
+        server vm2 172.16.0.22:22623 check
+        server vm3 172.16.0.23:22623 check
+```
+```
+backend 6443
+        balance roundrobin
+        mode tcp
+#       server vm0 172.16.0.20:6443 check
+        server vm1 172.16.0.21:6443 check
+        server vm2 172.16.0.22:6443 check
+        server vm3 172.16.0.23:6443 check
+backend 22623
+        balance roundrobin
+        mode tcp
+#       server vm0 172.16.0.20:22623 check
+        server vm1 172.16.0.21:22623 check
+        server vm2 172.16.0.22:22623 check
+        server vm3 172.16.0.23:22623 check
+```
+
+Save the file and restart the haproxy service.  
+
+`sudo systemctl restart haproxy`
+
 **That's it!  You have an OpenShift Cluster ready to go enjoy!**
 
 

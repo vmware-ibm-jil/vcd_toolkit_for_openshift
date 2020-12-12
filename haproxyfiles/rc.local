@@ -1,6 +1,8 @@
 #!/bin/sh -e
-#
+# V2.0
+#  Updated to fix permissions on haproxy.cfg file  so you can change it after cluster is active and added all worker nodes
 # rc.local
+#
 #
 # This script is executed at the end of each multiuser runlevel.
 # Make sure that the script will "exit 0" on success or any other
@@ -60,6 +62,14 @@ chmod 600 /home/core/.ssh/authorized_keys
 echo $SSHKEY > /home/lb/.ssh/authorized_keys
 chmod 600 /home/lb/.ssh/authorized_keys
 chown lb: /home/lb/.ssh/authorized_keys
+groupadd lbadmin
+usermod -a -G lbadmin core
+chown root:lbadmin /etc/haproxy/haproxy.cfg
+chmod 664 /etc/haproxy/haproxy.cfg
+echo '%lbadmin ALL=NOPASSWD: /bin/systemctl start haproxy' > /etc/sudoers.d/lbadmin
+echo '%lbadmin ALL=NOPASSWD: /bin/systemctl stop haproxy' >> /etc/sudoers.d/lbadmin
+echo '%lbadmin ALL=NOPASSWD: /bin/systemctl restart haproxy'>> /etc/sudoers.d/lbadmin
+
 #service haproxy restart
 rm /boot/firstboot
 reboot
