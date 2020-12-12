@@ -1,0 +1,68 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+cd /
+nohup python -m SimpleHTTPServer 8079 &
+if [ -f /boot/firstboot ]
+then
+vmtoolsd --cmd "info-get guestinfo.ovfEnv" > /home/lb/out
+IPADDR=`cat /home/lb/out|grep guestinfo.config.ipaddress|cut -f4 -d\"`
+a=`cat /home/lb/out|grep guestinfo.config.ipaddress|cut -f4 -d\"`
+NETMASK=`cat /home/lb/out|grep guestinfo.config.netmask|cut -f4 -d\"`
+GATEWAY=`cat /home/lb/out|grep guestinfo.config.gateway|cut -f4 -d\"`
+PUBLICDNS=`cat /home/lb/out|grep guestinfo.config.publicdns|cut -f4 -d\"`
+MASTER0IP=`cat /home/lb/out|grep guestinfo.config.master0.ip|cut -f4 -d\"`
+MASTER1IP=`cat /home/lb/out|grep guestinfo.config.master1.ip|cut -f4 -d\"`
+MASTER2IP=`cat /home/lb/out|grep guestinfo.config.master2.ip|cut -f4 -d\"`
+WORKER0IP=`cat /home/lb/out|grep guestinfo.config.worker0.ip|cut -f4 -d\"`
+WORKER1IP=`cat /home/lb/out|grep guestinfo.config.worker1.ip|cut -f4 -d\"`
+WORKER2IP=`cat /home/lb/out|grep guestinfo.config.worker2.ip|cut -f4 -d\"`
+WORKER3IP=`cat /home/lb/out|grep guestinfo.config.worker3.ip|cut -f4 -d\"`
+WORKER4IP=`cat /home/lb/out|grep guestinfo.config.worker4.ip|cut -f4 -d\"`
+WORKER5IP=`cat /home/lb/out|grep guestinfo.config.worker5.ip|cut -f4 -d\"`
+STORAGE0IP=`cat /home/lb/out|grep guestinfo.config.storage0.ip|cut -f4 -d\"`
+STORAGE1IP=`cat /home/lb/out|grep guestinfo.config.storage1.ip|cut -f4 -d\"`
+STORAGE2IP=`cat /home/lb/out|grep guestinfo.config.storage2.ip|cut -f4 -d\"`
+MASTER0FQDN=`cat /home/lb/out|grep guestinfo.config.master0.fqdn|cut -f4 -d\"`
+MASTER1FQDN=`cat /home/lb/out|grep guestinfo.config.master1.fqdn|cut -f4 -d\"`
+MASTER2FQDN=`cat /home/lb/out|grep guestinfo.config.master2.fqdn|cut -f4 -d\"`
+WORKER0FQDN=`cat /home/lb/out|grep guestinfo.config.worker0.fqdn|cut -f4 -d\"`
+WORKER1FQDN=`cat /home/lb/out|grep guestinfo.config.worker1.fqdn|cut -f4 -d\"`
+BOOTSTRAPIP=`cat /home/lb/out|grep guestinfo.config.bootstrap.ip|cut -f4 -d\"`
+SSHKEY=`cat /home/lb/out|grep guestinfo.config.sshkey|cut -f4 -d\"|base64 -d`
+cat /home/lb/out|grep guestinfo.config.host | cut -f4 -d\"|base64 -d >> /etc/hosts
+cat /home/lb/out|grep guestinfo.config.srv | cut -f4 -d\"|base64 -d >> /etc/dnsmasq.conf
+sed -i "s/PUBLICDNS/server=$PUBLICDNS/" /etc/dnsmasq.conf
+sed -e "s/IPADDR/$IPADDR/" -e "s/NETMASK/$NETMASK/" -e "s/GATEWAY/$GATEWAY/" -e "s/DNS1/$IPADDR/" -e "s/DNS2/$PUBLICDNS/" /etc/network/interfaces.template > /etc/network/interfaces
+echo "IPADDR=$IPADDR" >> /etc/sysconfig/network-scripts/ifcfg-ens192
+echo "NETMASK=$NETMASK" >> /etc/sysconfig/network-scripts/ifcfg-ens192
+echo "GATEWAY=$GATEWAY" >> /etc/sysconfig/network-scripts/ifcfg-ens192
+echo "DNS1=$DNS1" >> /etc/sysconfig/network-scripts/ifcfg-ens192
+echo "DNS2=$DNS2" >> /etc/sysconfig/network-scripts/ifcfg-ens192
+DOMAIN=`echo $MASTER0FQDN|cut -f2,3,4 -d.`
+echo "dns-nameservers $IPADDR $PUBLICDNS" >> /etc/network/interfaces
+FQDN=`echo $MASTER0FQDN|cut -f2,3,4 -d.`
+# sed -e "s/###MASTER0###/$MASTER0IP/g"  -e "s/###MASTER1###/$MASTER1IP/g"  -e "s/###MASTER2###/$MASTER2IP/g"  -e "s/###WORKER0###/$WORKER0IP/g"  -e "s/###WORKER1###/$WORKER1IP/" -e "s/###WORKER2###/$WORKER2IP/" -e "s/###WORKER3###/$WORKER3IP/"-e "s/###WORKER4###/$WORKER4IP/"-e "s/###WORKER5###/$WORKER5IP/"-e "s/###STORAGE0###/$STORAGE0IP/"-e "s/###STORAGE1###/$STORAGE1IP/"-e "s/###STORAGE2###/$STORAGE2IP/" -e "s/###BOOTSTRAPIP###/$BOOTSTRAPIP/" /etc/haproxy/haproxy.cfg.template >  /etc/haproxy/haproxy.cfg
+sed -e "s/###MASTER0###/$MASTER0IP/g"  -e "s/###MASTER1###/$MASTER1IP/g"  -e "s/###MASTER2###/$MASTER2IP/g"  -e "s/###WORKER0###/$WORKER0IP/g"  -e "s/###WORKER1###/$WORKER1IP/" -e "s/###WORKER2###/$WORKER2IP/"  -e "s/###BOOTSTRAPIP###/$BOOTSTRAPIP/" /etc/haproxy/haproxy.cfg.template >  /etc/haproxy/haproxy.cfg
+echo $SSHKEY > /home/core/.ssh/authorized_keys
+chmod 600 /home/core/.ssh/authorized_keys
+chown core: /home/core/.ssh/authorized_keys
+chmod 600 /home/core/.ssh/authorized_keys
+echo $SSHKEY > /home/lb/.ssh/authorized_keys
+chmod 600 /home/lb/.ssh/authorized_keys
+chown lb: /home/lb/.ssh/authorized_keys
+#service haproxy restart
+rm /boot/firstboot
+reboot
+fi
+
+exit 0

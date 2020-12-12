@@ -167,6 +167,7 @@ mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/worker-0.custom_property.xml
           curl -i -k -H "Accept: application/*+xml;version=31.0" -H "x-vcloud-authorization: $auth" -H "Content-Type: application/vnd.vmware.vcloud.productSections+xml" -X PUT  $i/productSections -d "@$IGNITIONDIR/custom_property.xml"
           echo $i
       mv $IGNITIONDIR/custom_property.xml $IGNITIONDIR/storage-1.custom_property.xml
+    fi
 
       grep $i $VMLIST|grep storage-2 > /dev/null 2>&1
       if [ $? = 0 ]
