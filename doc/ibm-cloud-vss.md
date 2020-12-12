@@ -371,18 +371,18 @@ Once you power on all the VMs there is an intricate dance between all the VMs wh
 
   `Example: export KUBECONFIG=/root/stuocpvmshared1/stuocpvmshared1.stulipshires.com/auth/kubeconfig`
 - Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
-```
+
 oc get nodes
  NAME                                  STATUS   ROLES    AGE   VERSION
  master-00.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-01.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-02.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af36
-```
+
 - Wait until `oc get csr` shows no new 'Pending' Conditions for about 10 mins. This took about 20 mins
 - Run `oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve`  to approve the 'Pending' certificates
 - Watch to see if other CSRs are in 'Pending' and repeat the approval step
 - Watch `oc get co`. Confirm the RH cluster operators are all 'Available'
-```
+
   # oc get co
  NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
  authentication                             4.4.19    True        False         False      28m
@@ -415,7 +415,7 @@ oc get nodes
  service-catalog-apiserver                  4.4.19    True        False         False      95m
  service-catalog-controller-manager         4.4.19    True        False         False      95m
  storage  
-```
+
 
 #### Configuration to enable OCP console login
 - Get the console url by running `oc get routes console -n openshift-console`
