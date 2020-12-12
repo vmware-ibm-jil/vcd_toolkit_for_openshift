@@ -237,8 +237,9 @@ firewall-cmd --reload
 ```
 [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
+
+`netstat -aunp`
 ```
-netstat -aunp
  ...
 udp        0      0 0.0.0.0:53              0.0.0.0:*                           1202/dnsmasq         
 ```
@@ -246,9 +247,9 @@ udp        0      0 0.0.0.0:53              0.0.0.0:*                           
 **Note: the following verifications need to be done after running the add_dns.sh script.( in the Update DNS step below)**
 
 * Verify that DNS lookups are good, and going to the right SERVER:
-```
-dig worker-00.myprefix.my.com
-...
+
+`dig worker-00.myprefix.my.com`
+```...
 ;; ANSWER SECTION:
 worker-00.myprefix.my.com. 0	IN	A	172.16.0.24
 ...
@@ -321,18 +322,21 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
 *  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
-```
-cp ssh_key /root/.ssh/id_rsa
-cp `ssh_key.pub /root/.ssh/id_rsa.pub
-```
+
+`cp ssh_key /root/.ssh/id_rsa`  
+`cp ssh_key.pub /root/.ssh/id_rsa.pub`
+
 At this point you have created a set of configuration files in /home/youhome/$PREFIXTODOMAIN/$IGNITIONDIR
 
   [6daf02c4]: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/ "Red Hat Download Site"
 
 
 #### Update DNS:
-* On 1st run only:  Execute `add_dns.sh`
-      This will add the content of `NEEDED_DNS_ENTRIES` into `/etc/hosts` and `NEEDED_SVC_ENTRIES` into `/etc/dnsmasq.conf`.  It fails with a `sed -e` error but seems to work anyway.
+* On 1st run only:  
+  Execute
+  `add_dns.sh`
+
+  This will add the content of `NEEDED_DNS_ENTRIES` into `/etc/hosts` and `NEEDED_SVC_ENTRIES` into `/etc/dnsmasq.conf`.  It fails with a `sed -e` error but seems to work anyway.
 * On subsequent runs (i.e. after you run `terraform destroy` all):  Change `/etc/hosts` and `/etc/dnsmasq.conf` manually
 * restart dnsmasq:
 `service dnsmasq restart`    
@@ -370,59 +374,63 @@ Once you power on all the VMs there is an intricate dance between all the VMs wh
     This directory contains both the cluster config and the kubeadmin password for UI login
 - export KUBECONFIG= clusternameDir/auth/kubeconfig
 
-  `Example: export KUBECONFIG=/root/stuocpvmshared1/stuocpvmshared1.stulipshires.com/auth/kubeconfig`
+  Example:   
+   `export KUBECONFIG=/root/stuocpvmshared1/stuocpvmshared1.stulipshires.com/auth/kubeconfig`
 - Wait until `oc get nodes` shows 3 masters. The workers will not show up until next manual step
 
-oc get nodes
+`oc get nodes`
+```
  NAME                                  STATUS   ROLES    AGE   VERSION
  master-00.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-01.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af3663
  master-02.ocp44-myprefix.my.com   Ready    master   16m   v1.17.1+6af36
-
+```
 - Wait until `oc get csr` shows no new 'Pending' Conditions for about 10 mins. This took about 20 mins
 - Run `oc get csr --no-headers | awk '{print $1}' | xargs oc adm certificate approve`  to approve the 'Pending' certificates
 - Watch to see if other CSRs are in 'Pending' and repeat the approval step
 - Watch `oc get co`. Confirm the RH cluster operators are all 'Available'
 
-  # oc get co
- NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
- authentication                             4.4.19    True        False         False      28m
- cloud-credential                           4.4.19    True        False         False      98m
- cluster-autoscaler                         4.4.19    True        False         False      88m
- console                                    4.4.19    True        False         False      32m
- csi-snapshot-controller                    4.4.19    True        False         False      35m
- dns                                        4.4.19    True        False         False      92m
- etcd                                       4.4.19    True        False         False      92m
- image-registry                             4.4.19    True        False         False      91m
- ingress                                    4.4.19    True        False         False      35m
- insights                                   4.4.19    True        False         False      91m
- kube-apiserver                             4.4.19    True        False         False      92m
- kube-controller-manager                    4.4.19    True        False         False      92m
- kube-scheduler                             4.4.19    True        False         False      93m
- kube-storage-version-migrator              4.4.19    True        False         False      35m
- machine-api                                4.4.19    True        False         False      91m
- machine-config                             4.4.19    True        False         False      94m
- marketplace                                4.4.19    True        False         False      90m
- monitoring                                 4.4.19    True        False         False      34m
- network                                    4.4.19    True        False         False      95m
- node-tuning                                4.4.19    True        False         False      95m
- openshift-apiserver                        4.4.19    True        False         False      87m
- openshift-controller-manager               4.4.19    True        False         False      88m
- openshift-samples                          4.4.19    True        False         False      87m
- operator-lifecycle-manager                 4.4.19    True        False         False      93m
- operator-lifecycle-manager-catalog         4.4.19    True        False         False      93m
- operator-lifecycle-manager-packageserver   4.4.19    True        False         False      89m
- service-ca                                 4.4.19    True        False         False      95m
- service-catalog-apiserver                  4.4.19    True        False         False      95m
- service-catalog-controller-manager         4.4.19    True        False         False      95m
- storage  
+`oc get co`
 
+```
+NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
+authentication                             4.5.22    True        False         False      79m
+cloud-credential                           4.5.22    True        False         False      100m
+cluster-autoscaler                         4.5.22    True        False         False      89m
+config-operator                            4.5.22    True        False         False      90m
+console                                    4.5.22    True        False         False      14m
+csi-snapshot-controller                    4.5.22    True        False         False      18m
+dns                                        4.5.22    True        False         False      96m
+etcd                                       4.5.22    True        False         False      95m
+image-registry                             4.5.22    True        False         False      91m
+ingress                                    4.5.22    True        False         False      84m
+insights                                   4.5.22    True        False         False      90m
+kube-apiserver                             4.5.22    True        False         False      95m
+kube-controller-manager                    4.5.22    True        False         False      95m
+kube-scheduler                             4.5.22    True        False         False      92m
+kube-storage-version-migrator              4.5.22    True        False         False      12m
+machine-api                                4.5.22    True        False         False      90m
+machine-approver                           4.5.22    True        False         False      94m
+machine-config                             4.5.22    True        False         False      70m
+marketplace                                4.5.22    True        False         False      13m
+monitoring                                 4.5.22    True        False         False      16m
+network                                    4.5.22    True        False         False      97m
+node-tuning                                4.5.22    True        False         False      53m
+openshift-apiserver                        4.5.22    True        False         False      12m
+openshift-controller-manager               4.5.22    True        False         False      90m
+openshift-samples                          4.5.22    True        False         False      53m
+operator-lifecycle-manager                 4.5.22    True        False         False      96m
+operator-lifecycle-manager-catalog         4.5.22    True        False         False      97m
+operator-lifecycle-manager-packageserver   4.5.22    True        False         False      14m
+service-ca                                 4.5.22    True        False         False      97m
+storage                                    4.5.22    True        False         False      53m
 
+```
 #### Configuration to enable OCP console login
 - Get the console url by running `oc get routes console -n openshift-console`
 
+`oc get routes console -n openshift-console`
 ```
-oc get routes console -n openshift-console
  NAME      HOST/PORT                                                  PATH   SERVICES   PORT    TERMINATION          WILDCARD
  console   console-openshift-console.apps.ocp44-myprefix.my.com          console    https   reencrypt/Redirect   None
 ```
