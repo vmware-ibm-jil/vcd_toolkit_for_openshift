@@ -64,6 +64,7 @@ chmod 600 /home/lb/.ssh/authorized_keys
 chown lb: /home/lb/.ssh/authorized_keys
 groupadd lbadmin
 usermod -a -G lbadmin core
+usermod -a -G lbadmin lb
 chown root:lbadmin /etc/haproxy/haproxy.cfg
 chmod 664 /etc/haproxy/haproxy.cfg
 echo '%lbadmin ALL=NOPASSWD: /bin/systemctl start haproxy' > /etc/sudoers.d/lbadmin
