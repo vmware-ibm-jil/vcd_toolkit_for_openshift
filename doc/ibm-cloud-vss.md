@@ -320,10 +320,10 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
 *  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
-
+```
 cp ssh_key /root/.ssh/id_rsa
-cp ssh_key.pub /root/.ssh/id_rsa.pub
-
+cp `ssh_key.pub /root/.ssh/id_rsa.pub
+```
 At this point you have created a set of configuration files in /home/youhome/$PREFIXTODOMAIN/$IGNITIONDIR
 
   [6daf02c4]: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/ "Red Hat Download Site"
