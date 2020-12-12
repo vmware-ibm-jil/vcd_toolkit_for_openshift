@@ -206,9 +206,9 @@ After the VM is created, connect it to your network:
   * ssh to bastion and execute the [steps in bullet 3 here](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-public-cat-rhel) to register the VM
 
 #### Install DNS - based on dnsmasq
-    * `yum install dnsmasq`
+`yum install dnsmasq`
 
-    * DHCP service must be turned off by adding the following entry in `/etc/dnsmasq.conf` for each interface and temporarily add outside world so you can clone repository, etc.:
+DHCP service must be turned off by adding the following entry in /etc/dnsmasq.conf for each interface and temporarily add outside world so you can clone repository, etc.:
   ```
   no-dhcp-interface=ens192
   server=9.9.9.9
@@ -220,11 +220,11 @@ After the VM is created, connect it to your network:
     * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
     * `systemctl start dnsmasq.service`
 #### Install preReqs of the Terraform  and SimpleHTTP server:
-  * `yum install uzip`
-  * `yum install python3`
-  * `yum install -y yum-utils`
-  * `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
-  * `yum install terraform`
+  - `yum install uzip`
+  - `yum install python3`
+  - `yum install -y yum-utils`
+  - `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
+  - `yum install terraform`
 
 
 #### Update firewall
@@ -259,8 +259,9 @@ SERVER: 127.0.0.1#53(127.0.0.1)
 `
 To check what lines are active in dnsmasq.conf:
 
-```
-    grep -v -e '^#' -e '^$'  /etc/dnsmasq.conf
+
+`grep -v -e '^#' -e '^$'  /etc/dnsmasq.conf`
+```    
     server=8.8.8.8
     listen-address=::1,127.0.0.1,172.16.0.10
     no-dhcp-interface=ens192
@@ -312,11 +313,11 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 [Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html). Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
 
     Example:
-
-
+```
   wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-install-linux-4.5.16.tar.gz
 
   wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.16.tar.gz
+```
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
 *  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
