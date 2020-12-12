@@ -307,7 +307,7 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 * Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place in `/tmp/pull-secret.txt`
 
   **Note:** Don't download the installation and client code from this page unless you are installing the current version of OpenShift (currently 4.6.x)
-* _Step not necessary as this was removed by sdl. createignition.sh and  change line 10 to point to the correct openshift-install binary_
+* _Step not necessary as this was removed by sdl. create_ignition.sh and  change line 10 to point to the correct openshift-install binary_
 * Download the appropriate OpenShift Install and client code from here:
 [Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html). Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
 
@@ -318,8 +318,6 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 
   wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.16.tar.gz
 ```
-
-
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
 *  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
 ```
