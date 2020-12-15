@@ -187,7 +187,7 @@ resource "vcd_vm_internal_disk" "disk1" {
   iops               = 1000
   storage_profile = "Standard"
   allow_vm_reboot = true
-  depends_on      = [vcd_vapp_vm.vm_name]
+  depends_on      = [vcd_vapp_vm.storage]
 }
 resource "vcd_vapp_vm" "loadbalancer" {
   org          = "###VCDORG###"
