@@ -164,7 +164,7 @@ resource "vcd_vapp_vm" "storage" {
 
   override_template_disk {
     bus_type           = "paravirtual"
-    size_in_mb         = "2097152"
+    size_in_mb         = "256000"
     bus_number         = 0
     unit_number        = 0
     iops               = 1000
@@ -173,7 +173,20 @@ resource "vcd_vapp_vm" "storage" {
 
   depends_on = [vcd_vapp_vm.bootstrap]
 }
-
+resource "vcd_vm_internal_disk" "disk1" {
+  vapp_name       =  vcd_vapp.###VCDVAPP###.name
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+  vm_name         = "storage-${count.index}"
+  bus_type        = "paravirtual"
+  size_in_mb      = "2097152"
+  bus_number      = 0
+  unit_number     = 1
+  iops               = 1000
+  storage_profile = "Standard"
+  allow_vm_reboot = true
+  depends_on      = [vcd_vapp_vm.vm_name]
+}
 resource "vcd_vapp_vm" "loadbalancer" {
   org          = "###VCDORG###"
   vdc          = "###VCDVDC###"
