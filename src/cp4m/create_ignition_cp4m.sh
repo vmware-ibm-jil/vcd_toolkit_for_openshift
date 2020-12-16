@@ -1,8 +1,11 @@
 . ./env_cp4m.sh
 mkdir -p $IGNITIONDIR
+if [ "$CREATESSHKEYS" = "yes" ]
+  then
 rm -rf ssh_key ssh_key.pub
 rm -rf $IGNITIONDIR/*.ign  $IGNITIONDIR/*.64 $IGNITIONDIR/auth $IGNITIONDIR/*.yaml $IGNITIONDIR/NEEDED_DNS_ENTRIES  $IGNITIONDIR/NEEDED_SRV_ENTRIES
 ssh-keygen -t rsa -b 4096 -N ''     -f ssh_key
+  fi
 cat $OPENSHIFT/cp4m/install-config-cp4m.yaml.templ| sed -e "s/BASEDOMAIN/$BASEDOMAIN/" -e "s/WORKER/$WORKERNAME/" -e "s/MASTER/$MASTERNAME/" -e "s/PREFIXDOMAIN/$PREFIXTODOMAIN/" -e "s/SERVICENETWORK/$SERVICENETWORK\/$SERVICENETWORKCIDR/" > $IGNITIONDIR/install-config.yaml
 echo "pullSecret: '`cat $PULLSECRET`'" >> $IGNITIONDIR/install-config.yaml
 echo "sshkey: '`cat ssh_key.pub`'" >> $IGNITIONDIR/install-config.yaml

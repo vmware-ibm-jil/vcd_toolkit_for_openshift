@@ -34,6 +34,7 @@ IGNITIONDIR=$PREFIXTODOMAIN.$BASEDOMAIN # directory where ignition files will be
 OSENVID=`echo $PREFIXTODOMAIN.$BASEDOMAIN|sed -e 's/\./-/g'`  # Do not update.  i.e "myprefix-my-com".  see also TERRAFORMID and VCDVAPP
 HTTPIGNPATH=`pwd`/$IGNITIONDIR/bootstrap-static.ign           # Do not update.
 DNSPOPULATE=yes                # tells script to populate local DNS /etc/hosts or not (yes|no)
+CREATESSHKEYS=yes               #tells script to create new ssh keys yes/no, no will reuse keys
 DNSMASQCONF=/etc/dnsmasq.conf  # location of dnsmasq.conf
 
 #======== VCD Toolkit Terraform related parameters ========
