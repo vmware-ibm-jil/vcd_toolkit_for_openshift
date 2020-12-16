@@ -256,8 +256,23 @@ worker-00.myprefix.my.com. 0	IN	A	172.16.0.24
 SERVER: 127.0.0.1#53(127.0.0.1)
 ```
 
-* Verify that your SRV records are in DNS:
-`
+* Verify that your SRV records are in DNS:   
+
+`dig _etcd-server-ssl._tcp.myprefix.my.com SRV`
+```
+;; ANSWER SECTION:
+_etcd-server-ssl._tcp.myprefix.my.com. 0 IN SRV 10 0 2380 etcd-1.myprefix.my.com.
+_etcd-server-ssl._tcp.myprefix.my.com. 0 IN SRV 10 0 2380 etcd-0.myprefix.my.com.
+_etcd-server-ssl._tcp.myprefix.my.com. 0 IN SRV 10 0 2380 etcd-2.myprefix.my.com.
+
+;; ADDITIONAL SECTION:
+etcd-0.myprefix.my.com. 0	IN	A	172.16.0.21
+etcd-2.myprefix.my.com. 0	IN	A	172.16.0.23
+etcd-1.myprefix.my.com. 0	IN	A	172.16.0.22
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+```
 To check what lines are active in dnsmasq.conf:
 
 
