@@ -1,4 +1,4 @@
-. ./env.sh
+. ./env_cp4m.sh
 echo $OSENVID
 VMLIST=vmlist
 VMLIST1=vmlist1

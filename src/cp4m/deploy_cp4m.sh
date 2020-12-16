@@ -1,4 +1,4 @@
-. ./env.sh
+. ./env_cp4m.sh
 KEY=`cat ssh_key.pub|base64 -w0`
 BOOTSTRAPDATA=`cat $IGNITIONDIR/append-bootstrap.64`
 MASTER0DATA=`cat $IGNITIONDIR/$MASTERNAME-00.64`
@@ -6,7 +6,7 @@ MASTER1DATA=`cat $IGNITIONDIR/$MASTERNAME-01.64`
 MASTER2DATA=`cat $IGNITIONDIR/$MASTERNAME-02.64`
 WORKER0DATA=`cat $IGNITIONDIR/$WORKERNAME-00.64`
 STORAGE0DATA=`cat $IGNITIONDIR/$STORAGENAME-00.64`
-cat $OPENSHIFT/maincp4m.tf.templ | sed -e "s/###VCDUSR###/$VCDUSR/" \
+cat $OPENSHIFT/cp4m/maincp4m.tf.templ | sed -e "s/###VCDUSR###/$VCDUSR/" \
 -e "s/###VCDPASS###/$VCDPASS/g" \
 -e "s/###VCDCATALOG###/$VCDCATALOG/g" \
 -e "s/###VCDURL###/https:\/\/$VCDIP\/api/" \
