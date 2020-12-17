@@ -509,6 +509,12 @@ Save the file and restart the haproxy service.
 
 **That's it!  You have an OpenShift Cluster ready to go enjoy!**
 
+## Optional Steps:
+
+- Add an NFS Server to provide Persistent storage. [Here is an article on how to set this up](https://medium.com/faun/openshift-dynamic-nfs-persistent-volume-using-nfs-client-provisioner-fcbb8c9344e). Make the NFS Storage Class the default Storage Class
+- [Enable the OCP Image registry using your NFS Storage](https://docs.openshift.com/container-platform/4.5/registry/configuring_registry_storage/configuring-registry-storage-baremetal.html)
+- [Exposing the Registry](https://docs.openshift.com/container-platform/4.5/registry/securing-exposing-registry.html)
+
 
 ### Reset the environment and redeploy
 Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and start over:
