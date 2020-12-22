@@ -17,5 +17,11 @@
  ovf:value="base64">
  <ovf:Label>Encoding</ovf:Label>
  </ovf:Property>
+ <ovf:Property
+ ovf:type="string"
+ ovf:key="guestinfo.disk.EnableUUID"
+ ovf:value="TRUE">
+ <ovf:Label>DiskUUID</ovf:Label>
+</ovf:Property>
   </ovf:ProductSection>
 </ProductSectionList>

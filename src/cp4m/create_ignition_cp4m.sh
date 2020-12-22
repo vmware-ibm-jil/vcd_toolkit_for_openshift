@@ -1,12 +1,12 @@
-. ./env.sh
+. ./env_cp4m.sh
 mkdir -p $IGNITIONDIR
 if [ "$CREATESSHKEYS" = "yes" ]
   then
 rm -rf ssh_key ssh_key.pub
 rm -rf $IGNITIONDIR/*.ign  $IGNITIONDIR/*.64 $IGNITIONDIR/auth $IGNITIONDIR/*.yaml $IGNITIONDIR/NEEDED_DNS_ENTRIES  $IGNITIONDIR/NEEDED_SRV_ENTRIES
 ssh-keygen -t rsa -b 4096 -N ''     -f ssh_key
-  fi 
-cat $OPENSHIFT/install-config.yaml.templ| sed -e "s/BASEDOMAIN/$BASEDOMAIN/" -e "s/WORKER/$WORKERNAME/" -e "s/MASTER/$MASTERNAME/" -e "s/PREFIXDOMAIN/$PREFIXTODOMAIN/" -e "s/SERVICENETWORK/$SERVICENETWORK\/$SERVICENETWORKCIDR/" > $IGNITIONDIR/install-config.yaml
+  fi
+cat $OPENSHIFT/cp4m/install-config-cp4m.yaml.templ| sed -e "s/BASEDOMAIN/$BASEDOMAIN/" -e "s/WORKER/$WORKERNAME/" -e "s/MASTER/$MASTERNAME/" -e "s/PREFIXDOMAIN/$PREFIXTODOMAIN/" -e "s/SERVICENETWORK/$SERVICENETWORK\/$SERVICENETWORKCIDR/" > $IGNITIONDIR/install-config.yaml
 echo "pullSecret: '`cat $PULLSECRET`'" >> $IGNITIONDIR/install-config.yaml
 echo "sshkey: '`cat ssh_key.pub`'" >> $IGNITIONDIR/install-config.yaml
 cp $IGNITIONDIR/install-config.yaml .
@@ -61,11 +61,47 @@ cd $IGNITIONDIR
 $FILETRANSPILER -i worker.ign  -f bootstrap -o $WORKERNAME-01-static.ign
 cd ..
 #######################
-########WORKER0 STATIC IP
+########WORKER2 STATIC IP
 echo $WORKERNAME-02.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
 cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$WORKER2/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
 cd $IGNITIONDIR
 $FILETRANSPILER -i worker.ign  -f bootstrap -o $WORKERNAME-02-static.ign
+cd ..
+########WORKER3 STATIC IP
+echo $WORKERNAME-03.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$WORKER3/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
+cd $IGNITIONDIR
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $WORKERNAME-03-static.ign
+cd ..
+########WORKER4 STATIC IP
+echo $WORKERNAME-04.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$WORKER4/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
+cd $IGNITIONDIR
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $WORKERNAME-04-static.ign
+cd ..
+########WORKER5 STATIC IP
+echo $WORKERNAME-05.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$WORKER5/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
+cd $IGNITIONDIR
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $WORKERNAME-05-static.ign
+cd ..
+########STORAGE0 STATIC IP
+echo $STORAGENAME-00.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE0/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
+cd $IGNITIONDIR
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-00-static.ign
+cd ..
+########STORAGE1 STATIC IP
+echo $STORAGENAME-01.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE1/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
+cd $IGNITIONDIR
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-01-static.ign
+cd ..
+########STORAGE2 STATIC IP
+echo $STORAGENAME-02.$DOMAIN > $IGNITIONDIR/bootstrap/etc/hostname
+cat  $OPENSHIFT/ens192.templ | sed -e "s/IPADDR1/$STORAGE2/" -e "s/NETMASK1/$NETMASK/" -e "s/GATEWAY1/$GATEWAY/" -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS11/$DNS/"  -e "s/DOMAIN1/$DOMAIN/" -e "s/DNS22/$PUBLICDNS/" >  $IGNITIONDIR/bootstrap/etc/sysconfig/network-scripts/ifcfg-ens192
+cd $IGNITIONDIR
+$FILETRANSPILER -i worker.ign  -f bootstrap -o $STORAGENAME-02-static.ign
 cd ..
 #######################
 HTTPURL=http://$HTTPIP`pwd`/$IGNITIONDIR/bootstrap-static.ign
@@ -82,6 +118,13 @@ base64 -w0 $MASTERNAME-02-static.ign >  $MASTERNAME-02.64
 base64 -w0 $WORKERNAME-00-static.ign >  $WORKERNAME-00.64
 base64 -w0 $WORKERNAME-01-static.ign >  $WORKERNAME-01.64
 base64 -w0 $WORKERNAME-02-static.ign >  $WORKERNAME-02.64
+base64 -w0 $WORKERNAME-03-static.ign >  $WORKERNAME-03.64
+base64 -w0 $WORKERNAME-04-static.ign >  $WORKERNAME-04.64
+base64 -w0 $WORKERNAME-05-static.ign >  $WORKERNAME-05.64
+base64 -w0 $STORAGENAME-00-static.ign >  $STORAGENAME-00.64
+base64 -w0 $STORAGENAME-01-static.ign >  $STORAGENAME-01.64
+base64 -w0 $STORAGENAME-02-static.ign >  $STORAGENAME-02.64
+
 cd ..
 
 ########### CONFIGURE NEEDED DNS ENTRIES
@@ -98,4 +141,10 @@ echo   $MASTER2 etcd-2.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
 echo   $WORKER0 $WORKERNAME-00.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
 echo   $WORKER1 $WORKERNAME-01.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
 echo   $WORKER2 $WORKERNAME-02.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
+echo   $WORKER3 $WORKERNAME-03.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
+echo   $WORKER4 $WORKERNAME-04.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
+echo   $WORKER5 $WORKERNAME-05.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
+echo   $STORAGE0 $STORAGENAME-00.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
+echo   $STORAGE1 $STORAGENAME-01.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
+echo   $STORAGE2 $STORAGENAME-02.$DOMAIN >> $IGNITIONDIR/NEEDED_DNS_ENTRIES
 sed -e "s/###DOMAIN###/$DOMAIN/g" -e "s/###LB###/$LB/g" $OPENSHIFT/srv_entry.templ >> $IGNITIONDIR/NEEDED_SRV_ENTRIES

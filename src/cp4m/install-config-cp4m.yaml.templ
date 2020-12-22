@@ -1,0 +1,21 @@
+apiVersion: v1
+baseDomain: BASEDOMAIN
+compute:
+- hyperthreading: Enabled
+  name: WORKER
+  replicas: 9 
+controlPlane:
+  hyperthreading: Enabled
+  name: MASTER
+  replicas: 3
+metadata:
+  name: PREFIXDOMAIN
+networking:
+  clusterNetworks:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - SERVICENETWORK
+platform:
+  none: {}

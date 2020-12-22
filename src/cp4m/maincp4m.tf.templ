@@ -85,8 +85,8 @@ resource "vcd_vapp_vm" "master" {
   name          = "master-${count.index}"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###OSTEMPLATE###"
-  memory        = "16384"
-  cpus           = "4"
+  memory        = "24576"
+  cpus           = "8"
   power_on      = false
 
   network {
@@ -102,7 +102,7 @@ resource "vcd_vapp_vm" "master" {
     bus_number         = 0
     unit_number        = 0
     iops               = 1000
-    storage_profile    = "4 IOPS/GB"
+    storage_profile    = "10 IOPS/GB"
   }
 
   depends_on = [vcd_vapp_vm.worker]
@@ -111,14 +111,14 @@ resource "vcd_vapp_vm" "worker" {
   org          = "###VCDORG###"
   vdc          = "###VCDVDC###"
 
-  count = 3
+  count = 6
 
   vapp_name     = vcd_vapp.###VCDVAPP###.name
   name          = "worker-${count.index}"
   catalog_name  = "###VCDCATALOG###"
   template_name = "###OSTEMPLATE###"
-  memory        = "16384"
-  cpus           = "4"
+  memory        = "32768"
+  cpus           = "16"
   expose_hardware_virtualization = true
   power_on      = false
 
@@ -140,7 +140,54 @@ resource "vcd_vapp_vm" "worker" {
 
   depends_on = [vcd_vapp_vm.bootstrap]
 }
+resource "vcd_vapp_vm" "storage" {
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
 
+  count = 3
+
+  vapp_name     = vcd_vapp.###VCDVAPP###.name
+  name          = "storage-${count.index}"
+  catalog_name  = "###VCDCATALOG###"
+  template_name = "###OSTEMPLATE###"
+  memory        = "65536"
+  cpus           = "16"
+  expose_hardware_virtualization = true
+  power_on      = false
+
+  network {
+    type               = "org"
+    name               = "###VCDNETWORK###"
+    ip_allocation_mode = "DHCP"
+    is_primary         = true
+  }
+
+  override_template_disk {
+    bus_type           = "paravirtual"
+    size_in_mb         = "256000"
+    bus_number         = 0
+    unit_number        = 0
+    iops               = 1000
+    storage_profile    = "4 IOPS/GB"
+  }
+
+  depends_on = [vcd_vapp_vm.bootstrap]
+}
+resource "vcd_vm_internal_disk" "disk1" {
+
+  count  = 3
+  vapp_name       =  vcd_vapp.###VCDVAPP###.name
+  org          = "###VCDORG###"
+  vdc          = "###VCDVDC###"
+  vm_name         = "storage-${count.index}"
+  bus_type        = "paravirtual"
+  size_in_mb      = "2097152"
+  bus_number      = 0
+  unit_number     = 1
+  storage_profile = "Standard"
+  allow_vm_reboot = true
+  depends_on      = [vcd_vapp_vm.storage]
+}
 resource "vcd_vapp_vm" "loadbalancer" {
   org          = "###VCDORG###"
   vdc          = "###VCDVDC###"
