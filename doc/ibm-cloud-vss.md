@@ -36,8 +36,8 @@ To browse the available images:
 * select *vApp Templates*
 * There are 3 images in the list that we will be using:
   * rhcos OpenShift 4.5.6 - OpenShift CoreOS template
-  * rhcos OpenShift 4.5.17 - OpenShift CoreOS template
-  * LB4Openshift-0.1 - Load balancer template
+  * rhcos OpenShift 4.4.17 - OpenShift CoreOS template
+  * lbopenshiftv2 - Load balancer template
 * If you want to add your own Catalogs and more, see the [documentation about catalogs](#about-catalogs)
 
 ## Networking
