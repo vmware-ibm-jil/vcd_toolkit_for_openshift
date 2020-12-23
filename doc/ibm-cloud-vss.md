@@ -68,13 +68,12 @@ Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can u
 
 Gather the IPs and Sub-allocated IP Addresses for the ESG, for future reference:
 * The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.    
-* Go to main menu > Edges > Select your ESG
-  - TODO - the UI has changed since this writing.  Need to update next line about what to save and where to find it.(its still right there...)
-  - Go to `Gateway Interfaces` and save the Gateways, subnets, primary IPs of the  `tenant-external` and `servicexx`  External Networks.
+* Go to main menu > Networking > Edges,  and Select your ESG
+  - Go to `Networks and subnets` and copy down the `Participating Subnets` of the `tenant-external` and `servicexx`  External Networks. (we will need this info later)
     - the tenant-external network allows external internet routing
     - the service network allows routing to IBM Cloud private network /services
 
-For the following steps go to main menu > Edges > Select ESG and select **Configure Services**
+For the following steps go to main menu > Networks > Edges > Select your ESG and select **SERVICES** 
 
 See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-traffic
 
