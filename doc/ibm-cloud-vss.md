@@ -298,9 +298,11 @@ The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve thei
 * `cd /; nohup python -m SimpleHTTPServer 80 &`
 * Note: to see requests to the server `tail -f /nohup.out`
 
-#### Install VCD Toolkit
-* clone this repo
-* `cp -r <this repo>/src/* /usr/local/openshift/`
+## Install VCD Toolkit
+* `git clone https://github.com/vmware-ibm-jil/vcd_toolkit_for_openshift.git`
+* `cd vcd_toolkit_for_openshift/`
+* `mkdir /usr/local/openshift`
+* `cp -r src/* /usr/local/openshift/`
 
 Now the toolkit is installed in `/usr/local/openshift`
 
@@ -312,12 +314,12 @@ Now the toolkit is installed in `/usr/local/openshift`
 
 #### Update env.sh:
 `env.sh` will contain all the configuration for your cluster.
-See `this repo`/config/env.sh which is self documenting.
+See vcd_toolkit_for_openshift/config/env.sh which is self documenting.
 At this point you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN.
 The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 * `mkdir /home/yourhome/$PREFIXTODOMAIN`
 * `cd /home/yourHome/$PREFIXTODOMAIN`  
-* `cp this-repo/config/env.sh /home/yourHome/$PREFIXTODOMAIN`   
+* `cp vcd_toolkit_for_openshift/config/env.sh /home/yourHome/$PREFIXTODOMAIN`   
 * Fill in the variables in env.sh as documented in env.sh itself.
 
 #### Create Ignition files, install-config.yaml, and ssh keys:
