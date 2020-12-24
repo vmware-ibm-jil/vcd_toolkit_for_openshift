@@ -1,5 +1,5 @@
 ### Overview
-[VCD Toolkit Overview here](https://github.com/vmware-ibm-jil/vcd_toolkit_for_openshift)
+[VCD Toolkit for OpenShift Overview here](https://github.com/vmware-ibm-jil/vcd_toolkit_for_openshift)
 
 The VCD Toolkit will deploy OpenShift(OCP) into an environment based on IBM Cloud VMware Solutions Shared, which is based on VMWare Cloud Director (VCD).
 This is a shared VMWare based environment where we can provision our own VMs and networks.  It comes with an Edge Gateway which will isolate our virtual datacenter from the Internet as needed. 
