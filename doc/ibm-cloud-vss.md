@@ -191,7 +191,7 @@ The Bastion VM hosts the vcd_toolkit_for_openshift and is the VM where we launch
 Go to Virtual Machines > **New VM**
 Name: **bastion**
   - **From Template**
-  - Select **vm-redhat7**
+  - Select **vm-redhat8** (todo - have to test bastion setup instructions with redhat8, we know it works but have not double checked the instructions.  If you have a problem please open an issue)
 
 After the VM is created, connect it to your network:
  - from Virtual Machines, select bastion VM
@@ -221,7 +221,7 @@ DHCP service must be turned off by adding the following entry in /etc/dnsmasq.co
     * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
     * `systemctl start dnsmasq.service`
 #### Install preReqs of the Terraform  and SimpleHTTP server:
-  - `yum install uzip`
+  - `yum install unzip`
   - `yum install python3`
   - `yum install -y yum-utils`
   - `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
