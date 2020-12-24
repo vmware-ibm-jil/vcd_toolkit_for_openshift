@@ -1,6 +1,9 @@
 ### Overview
-We will deploy OpenShift(OCP) into an environment based on IBM Cloud VMware Solutions Shared, which is based on VMWare Cloud Director (VCD).
-This is a shared VMWare based environment where we get our own VMs and our own Edge Gateway to isolate us from the Internet as needed. We can create as many network/subnets, routes, firewalls, and VMs as we need.
+[VCD Toolkit Overview here](https://github.com/vmware-ibm-jil/vcd_toolkit_for_openshift)
+
+The VCD Toolkit will deploy OpenShift(OCP) into an environment based on IBM Cloud VMware Solutions Shared, which is based on VMWare Cloud Director (VCD).
+This is a shared VMWare based environment where we can provision our own VMs and networks.  It comes with an Edge Gateway which will isolate our virtual datacenter from the Internet as needed. 
+We can create as many networks/subnets, routes, firewalls, and VMs as we need.
 
 #### About IBM Cloud VMWare Solution Shared and VMWare Cloud Director
 For those who are familiar with VMWare, think of Cloud Director as a big PostgreSQL database and a streamlined modern web UI on top of a vCenter and  NSX APIs, and ESXi infrastructure.  All actions taken in the VCD console are pushed to vCenter and govc API's.  The beauty is that only the essentials of VCenter/NSX are surfaced and modernized for true cloud based virtual datacenter operations.  All vCenter, NSX, and ESXi maintenance and upgrades are handled by the IBM Solution Shared team for you.  You have no direct access to vCenter, NSX, or ESXi.
