@@ -68,9 +68,9 @@ Create a network where we will install VMs and OCP.
 We need to configure the Edge Service Gateway (ESG) to provide inbound and outbound connectivity.  For a network overview diagram, followed by general Edge setup instruction, see: https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-create-network
 
 Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can use for SNAT and DNAT translations in and out of the datacenter instance.  VMWare vCloud calls these `sub-allocated` addresses.
-
-Gather the IPs and Sub-allocated IP Addresses for the ESG, for future reference:
-* The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.    
+The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.
+Gather the following information that you will need when configuring the ESG: 
+* Make a `list of the IPs and Sub-allocated IP Addresses` for the ESG.       
 * Go to main menu > Networking > Edges,  and Select your ESG
   - Go to `Networks and subnets` and copy down the `Participating Subnets` of the `tenant-external` and `servicexx` external networks. (we will need this info later)
     - the tenant-external network allows external internet routing
@@ -84,7 +84,7 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
 
 #### Outbound from the OCP private network to public Internet
 1. Firewall Rule
-    - Firewall tab and select '+' to add
+    - go to the Firewall tab and select '+' to add
       - Name: **ocpnet**
       - Source: Select the '+'
         - select 'Org Vdc Networks' from the objects type list
@@ -93,7 +93,7 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
      - Select: 'Save changes'
 
 2. NAT
-    - NAT tab and select '+SNAT RULE' in the NAT44 Rules
+    - go to the NAT tab and select '+SNAT RULE' in the NAT44 Rules
       - Applied On: **<your>-tenant-external**
       - Original Source IP/Range: **172.16.0.1/24**
       - Translated Source IP/Range: pick an address not already used address from the sub-allocated network IPs
@@ -102,7 +102,7 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
 #### Outbound from OCP private network to IBM Cloud private network
 [Official instruction to connect to the IBM Cloud Services Private Network](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-access).  Our shorthand setup steps:
 1. Firewall Rule
-    - Firewall tab and select '+' to add
+    - go to the Firewall tab and select '+' to add
       - Name: **ocpnet cloud-private**
       - Source: Select the '+'
         - select 'Org Vdc Networks' from the objects type list
@@ -113,44 +113,42 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
      - Select: 'Save changes'
 
 2. NAT
-    - NAT tab and select '+SNAT RULE' in the NAT44 Rules
+    - go to the NAT tab and select '+SNAT RULE' in the NAT44 Rules
       - Applied On: **<your>-service-nn**
       - Original Source IP/Range: **172.16.0.1/24**
       - Translated Source IP/Range: enter the `Primary IP` for the service network interface copied from the ESG settings (Or select it from the dropdown list)
       - Description: **access to the IBM Cloud private**
 
 #### Inbound config to the bastion on OCP private network
-We need to configure DNAT so that we have ssh access the bastion VM from public internet.
-  - Choose an available IP Address from the set of `public/sub-allocated` IPs for the VCD datacenter instance.
+We need to configure DNAT so that we have ssh access the bastion VM from public internet:
   - We will use  172.16.0.10 address for bastion VM
 1. Firewall Rule
-    - Firewall tab and select '+' to add
+    - go to the Firewall tab and select '+' to add
       - Name: **bastion**
       - Destination: tap the 'IP' button
-        - choose an available IP from your list of  `public/sub-allocated IPs` and enter it 
+        - choose an available IP address from your list of  `public/sub-allocated IPs` and enter it 
       - Service: Protocol: `TCP` Source port: `any` Destination port: `22`
      - Select: 'Save changes'
 
 2. NAT
-    - NAT tab and select '+DNAT RULE' in the NAT44 Rules
+    - go to the NAT tab and select '+DNAT RULE' in the NAT44 Rules
       - Applied On: **your-tenant-external**
       - Original Source IP/Range: enter the same public IP that you used in the firewall rule
       - Translated Source IP/Range: **172.16.0.10**
       - Description: **access to bastion host**
 
 #### Inbound config to OCP Console
-We need to configure DNAT so that we have https access the console from public internet.
-  - Choose an available IP Address from the set of `public/sub-allocated` IPs for the VCD datacenter instance.
+We need to configure DNAT so that we have https access the console from public internet:
 1. Firewall Rule
-    - Firewall tab and select '+' to add
+    - go to the Firewall tab and select '+' to add
       - Name: **ocpconsole**
       - Destination: Select the 'IP'
-        - enter the `chosen public/sub-allocated IP`
+        - choose an available IP address from your list of  `public/sub-allocated IPs` and enter it
       - Service: Protocol: `any`
      - Select: 'Save changes'
 
 2. NAT
-    - NAT tab and select '+DNAT RULE' in the NAT44 Rules
+    - go to the NAT tab and select '+DNAT RULE' in the NAT44 Rules
       - Applied On: **your-tenant-external**
       - Original Source IP/Range: enter the `chosen public/sub-allocated IP`
       - Translated Source IP/Range: **IP of Load Balancer**
