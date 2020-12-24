@@ -308,7 +308,7 @@ Now the toolkit is installed in `/usr/local/openshift`
     - TODO: allow for flexible number of worker nodes. Changes would have to occur in env.sh.template, create_ignition.sh, deploy.sh, LBDNS.xml, main.tf.withProperties and vcd.sh
     - TODO: make scripts generic to OCP versions allowing user to specify version and change create_ignition.sh to use appropriate installer version binary
 
-#### Install OpenShift
+## Install OpenShift
 
 #### Update env.sh:
 `env.sh` will contain all the configuration for your cluster.
