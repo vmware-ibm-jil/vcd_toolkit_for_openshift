@@ -72,7 +72,7 @@ Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can u
 Gather the IPs and Sub-allocated IP Addresses for the ESG, for future reference:
 * The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.    
 * Go to main menu > Networking > Edges,  and Select your ESG
-  - Go to `Networks and subnets` and copy down the `Participating Subnets` of the `tenant-external` and `servicexx`  External Networks. (we will need this info later)
+  - Go to `Networks and subnets` and copy down the `Participating Subnets` of the `tenant-external` and `servicexx` external networks. (we will need this info later)
     - the tenant-external network allows external internet routing
     - the service network allows routing to IBM Cloud private network /services
 
@@ -80,9 +80,10 @@ For the following steps go to main menu > Networks > Edges > Select your ESG and
 
 See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-traffic
 
+**Note:** make modifications by editing the various columns on the screen as instructed below.
+
 #### Outbound from the OCP private network to public Internet
 1. Firewall Rule
-      **Note** modifications are done by editing the various columns on the screen
     - Firewall tab and select '+' to add
       - Name: **ocpnet**
       - Source: Select the '+'
