@@ -126,15 +126,15 @@ We need to configure DNAT so that we have ssh access the bastion VM from public 
 1. Firewall Rule
     - Firewall tab and select '+' to add
       - Name: **bastion**
-      - Destination: Select the 'IP'
-        - enter the `chosen public/sub-allocated IP`
+      - Destination: tap the 'IP' button
+        - choose an available IP from your list of  `public/sub-allocated IPs` and enter it 
       - Service: Protocol: `TCP` Source port: `any` Destination port: `22`
      - Select: 'Save changes'
 
 2. NAT
     - NAT tab and select '+DNAT RULE' in the NAT44 Rules
       - Applied On: **your-tenant-external**
-      - Original Source IP/Range: enter the `chosen public/sub-allocated IP`
+      - Original Source IP/Range: enter the same public IP that you used in the firewall rule
       - Translated Source IP/Range: **172.16.0.10**
       - Description: **access to bastion host**
 
