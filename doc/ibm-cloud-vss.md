@@ -89,7 +89,7 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
       - Source: Select the '+'
         - select 'Org Vdc Networks' from the objects type list
         - select 'ocpnet' from list and then click '->' and 'Keep'
-      - Destination: skip
+      - Destination: skip. (this will become "any" in the Firewall Rules screen)
      - Select: 'Save changes'
 
 2. NAT
@@ -109,7 +109,7 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
         - select 'ocpnet' from list and then click '->' and 'Keep'
       - Destination: Select the '+'
         - select 'Gateway Interfaces' from the objects type list
-        - select **<your>-service-nn** network from list and then click '->' and 'Keep'
+        - select **<your>-service-nn** network from list and then click '->' and 'Keep'. (this will become "vnic-1" in the Firewall Rules screen)
      - Select: 'Save changes'
 
 2. NAT
