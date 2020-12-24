@@ -316,10 +316,9 @@ To check what lines are active in dnsmasq.conf:
 `grep -v -e '^#' -e '^$'  /etc/dnsmasq.conf`
 ```    
     server=8.8.8.8
+    server=8.8.4.4
     listen-address=::1,127.0.0.1,172.16.0.10
     no-dhcp-interface=ens192
-    expand-hosts
-    domain=myprefix.my.com
     conf-dir=/etc/dnsmasq.d,.rpmnew,.rpmsave,.rpmorig
     address=/.apps.myprefix.my.com/172.16.0.19
     srv-host="_etcd-server-ssl._tcp.myprefix.my.com",etcd-0.myprefix.my.com,2380,10,0
