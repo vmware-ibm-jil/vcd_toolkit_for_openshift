@@ -14,7 +14,7 @@ The **IBMCloud VMWare Solution Shared** is a payGo environment. You pay a low mo
 The overall approach is a **Bare Metal Install**, also known as UPI - User provisioned Infrastructure.  The  [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart) and [Install with Static IPs](https://www.openshift.com/blog/openshift-4-2-vsphere-install-with-static-ips) and [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart) describe the approach that is followed by the vcd_toolkit_for_openshift.
 
 ## Ordering
-You order **VMware Solutions Shared** in IBM Cloud.  When you order a new instance, a **DataCenter** is created in vCloud Director.  It takes about an hour.
+You will order a **VMware Solutions Shared** instance in IBM Cloud(below).  When you order a new instance, a **DataCenter** is created in vCloud Director.  It takes about an hour.
 
 #### Procedure:
 * in IBM Cloud > VMWare > Overview,  select **VMWare Solutions Shared**
@@ -65,7 +65,7 @@ Create a network where we will install VMs and OCP.
 
 
 ### Configure edge networking
-We need to configure the Edge Service Gateway (ESG) to provide inbound and outbound connectivity.  For a network overview diagram, followed by general Edge setup instruction, see: https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-create-network
+Configure the Edge Service Gateway (ESG) to provide inbound and outbound connectivity.  For a network overview diagram, followed by general Edge setup instruction, see: https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-create-network
 
 Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can use for SNAT and DNAT translations in and out of the datacenter instance.  VMWare vCloud calls these `sub-allocated` addresses.
 The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.
@@ -138,7 +138,7 @@ We need to configure DNAT so that we have ssh access the bastion VM from public 
       - Description: **access to bastion host**
 
 #### Inbound config to OCP Console
-We need to configure DNAT so that we have https access the console from public internet:
+Configure DNAT so that you have https access to the console from public internet:
 1. Firewall Rule
     - go to the Firewall tab and select '+' to add
       - Name: **ocpconsole**
@@ -150,13 +150,13 @@ We need to configure DNAT so that we have https access the console from public i
 2. NAT
     - go to the NAT tab and select '+DNAT RULE' in the NAT44 Rules
       - Applied On: **your-tenant-external**
-      - Original Source IP/Range: enter the `chosen public/sub-allocated IP`
-      - Translated Source IP/Range: **IP of Load Balancer**
+      - Original Source IP/Range: choose an available IP address from your list of  `public/sub-allocated IPs` and enter it 
+      - Translated Source IP/Range: **172.16.0.19** (This is the IP address we will use for the Load Balancer)
       - Description: **access to ocp console**
 
 
 #### Setup DHCP
-* We will use our Edge gateway to provide DHCP services.  On the Edge > DHCP, click + and configure DHCP with the following settings:
+* Our Edge gateway will provide DHCP services.  On the Edge > DHCP, click + and configure DHCP with the following settings:
     ```
     IPRange: 172.16.0.150-172.16.0.245
     Primary Nameserver: 172.16.0.10 (bastion)
@@ -186,7 +186,7 @@ Pre-scan script results:
 
 
 ## Create and configure Bastion VM
-The Bastion VM hosts the vcd_toolkit_for_openshift and  is the VM where we launch installations from.  The VM also hosts **DNS service**, and an **HTTP server** through which the Ignition configuration files are provided to Bootstrap during installation.
+The Bastion VM hosts the vcd_toolkit_for_openshift and is the VM where we launch installations from.  The VM also hosts **DNS service**, and an **HTTP server** through which the Ignition configuration files are provided to Bootstrap during installation.
 
 Go to Virtual Machines > **New VM**
 Name: **bastion**
