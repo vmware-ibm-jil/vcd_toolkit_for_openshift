@@ -13,6 +13,7 @@ The **IBMCloud VMWare Solution Shared** is a payGo environment. You pay a low mo
 #### Install approach
 The overall approach is a **Bare Metal Install**, also known as UPI - User provisioned Infrastructure.  The  [OpenShift 4.1 Bare Metal Install Quickstart](https://www.openshift.com/blog/openshift-4-bare-metal-install-quickstart) and [Install with Static IPs](https://www.openshift.com/blog/openshift-4-2-vsphere-install-with-static-ips) and [OpenShift 4.2 VSphere Quickstart](https://www.openshift.com/blog/openshift-4-2-vsphere-install-quickstart) describe the approach that is followed by the vcd_toolkit_for_openshift.
 
+
 ## Ordering
 You will order a **VMware Solutions Shared** instance in IBM Cloud(below).  When you order a new instance, a **DataCenter** is created in vCloud Director.  It takes about an hour.
 
@@ -30,8 +31,8 @@ You will order a **VMware Solutions Shared** instance in IBM Cloud(below).  When
 * we recommend that you create individual Users/passwords for each person accessing the environment
 * Note: You don't need any Private network Endpoints unless you want to access the VDC from other IBM Cloud accounts over Private network
 
-## Choose an Image Catalog
 
+## Choose an Image Catalog
 We need a catalog of VM images to use for our OpenShift VMs.
 Fortunately IBM provides a set of images that are tailored to work for OpenShift deployments.
 To browse the available images:
@@ -42,6 +43,7 @@ To browse the available images:
   * rhcos OpenShift 4.4.17 - OpenShift CoreOS template
   * lbopenshiftv2 - Load balancer template
 * If you want to add your own Catalogs and more, see the [documentation about catalogs](#about-catalogs)
+
 
 ## Networking
 Much of the following is covered in general in the [Operator Guide/Networking](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-networking). Below is the specific network configuration required.
@@ -153,7 +155,6 @@ Configure DNAT so that you have https access to the console from public internet
       - Original Source IP/Range: choose an available IP address from your list of  `public/sub-allocated IPs` and enter it 
       - Translated Source IP/Range: **172.16.0.19** (This is the IP address we will use for the Load Balancer)
       - Description: **access to ocp console**
-
 
 #### Setup DHCP
 * Our Edge gateway will provide DHCP services.  On the Edge > DHCP, click + and configure DHCP with the following settings:
@@ -281,7 +282,6 @@ ibm.com.		21599	IN	A	129.42.38.10
   - `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
   - `yum install terraform`
 
-
 #### Update firewall
 Allow HTTP(port 80) and DNS(port 53) traffic into bastion.  Issue the following commands.  You should get `success` message from each:
 ```
@@ -292,17 +292,16 @@ firewall-cmd --reload
 ```
 [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
-
-
-
-
 #### Start HTTP Server
 The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve their ignition files.
 * Important: start the server from / directory so that path to ignition files is correct!
 * `cd /; nohup python -m SimpleHTTPServer 80 &`
 * Note: to see requests to the server `tail -f /nohup.out`
 
+
 ## Install VCD Toolkit
+On Bastion:
+* `cd ~`
 * `git clone https://github.com/vmware-ibm-jil/vcd_toolkit_for_openshift.git`
 * `cd vcd_toolkit_for_openshift/`
 * `mkdir /usr/local/openshift`
@@ -312,7 +311,7 @@ Now the toolkit is installed in `/usr/local/openshift`
 
 * The toolkit supports the deployment of OCP 4.4 or 4.5 with 3 master and 3 worker nodes without any storage provisioners.
     - TODO: allow for flexible number of worker nodes. Changes would have to occur in env.sh.template, create_ignition.sh, deploy.sh, LBDNS.xml, main.tf.withProperties and vcd.sh
-    - TODO: make scripts generic to OCP versions allowing user to specify version and change create_ignition.sh to use appropriate installer version binary
+
 
 ## Install OpenShift
 
