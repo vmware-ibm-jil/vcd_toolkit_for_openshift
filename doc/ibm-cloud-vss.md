@@ -327,10 +327,9 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 
 #### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
-* Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place in `/tmp/pull-secret.txt`
+* Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place in the `pullsecret.txt` file configured in your env.sh.
 
   **Note:** Don't download the installation and client code from this page unless you are installing the current version of OpenShift (currently 4.6.x which is not yet supported by the vcd_toolkit_for_openshift)
-* _Step not necessary as this was removed by sdl. create_ignition.sh and  change line 10 to point to the correct openshift-install binary_
 * Download the appropriate OpenShift Install and client code from here:
 [Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html). Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
 
