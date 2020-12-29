@@ -509,6 +509,7 @@ storage                                    4.5.22    True        False         F
 ```
 
 - From a browser, connect to the "console host" from the `oc get routes` command with https. You will need to accept numerous security warnings as the deployment is using self-signed certificates.
+- id is `kubeadmin` and password is in `<clusternameDir>/auth/kubeadmin-password`
 
 
 ### One last step you must complete in order to ensure the stability of your cluster!
