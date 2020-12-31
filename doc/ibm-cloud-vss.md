@@ -327,17 +327,18 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 
 #### Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
-* Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place in the `pullsecret.txt` file configured in your env.sh.
+* Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place it in the `pullsecret.txt` file configured in your env.sh.
 
-  **Note:** Don't download the installation and client code from this page unless you are installing the current version of OpenShift (currently 4.6.x which is not yet supported by the vcd_toolkit_for_openshift)
-* Download the appropriate OpenShift Install and client code from here:
-[Red Hat Download Site (choose appropriate version)](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/) Additional OCP install details can be found here: [OCP 4.5 Install instructions but choose proper version.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html). Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
+* The VCD toolkit currently supports OCP versions 4.5 and 4.4.   OCP 4.6 is not yet supported so **Do not download the installation and client code from the above page.**
+* Instead, select the 4.4 or 4.5 version and download the appropriate OpenShift Install and client code from here:
+[Red Hat Download Site](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/).  Additional OCP install details can be found here: [OCP 4.5 Install instructions.](https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere-installer-provisioned.html) (choose the appropriate version in the dropdown)
+* Untar the files and place `openshift-install` in /usr/local/openshift and the `oc` and `kubectl` command in /usr/local/bin
 
     Example:
 ```
-  wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-install-linux-4.5.16.tar.gz
+  wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-install-linux-4.5.24.tar.gz
 
-  wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.16.tar.gz
+  wget mirror.openshift.com/pub/openshift-v4/clients/ocp/4.5.16/openshift-client-linux-4.5.24.tar.gz
 ```
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
