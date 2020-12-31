@@ -313,9 +313,7 @@ Now the toolkit is installed in `/usr/local/openshift`
     - TODO: allow for flexible number of worker nodes. Changes would have to occur in env.sh.template, create_ignition.sh, deploy.sh, LBDNS.xml, main.tf.withProperties and vcd.sh
 
 
-## Install OpenShift
-
-#### Update env.sh:
+## Update env.sh:
 `env.sh` will contain all the configuration for your cluster.
 See vcd_toolkit_for_openshift/config/env.sh which is self documenting.
 At this point you need to choose a BASEDOMAIN, and PREFIXTODOMAIN which will become your FQDN.
@@ -325,7 +323,8 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 * `cp vcd_toolkit_for_openshift/config/env.sh /home/yourHome/$PREFIXTODOMAIN`   
 * Fill in the variables in env.sh as documented in env.sh itself.
 
-#### Create Ignition files, install-config.yaml, and ssh keys:
+
+## Create Ignition files, install-config.yaml, and ssh keys:
 * Execute `PATH=$PATH:/usr/local/openshift;export PATH`
 * Retrieve a pull secret from [Red Hat OCP on vSphere Installation Instructions](https://cloud.redhat.com/openshift/install/vsphere/user-provisioned) and place it in the `pullsecret.txt` file configured in your env.sh.
 
@@ -342,7 +341,7 @@ The default $PREFIXTODOMAIN.$BASEDOMAIN in env.sh is `myprefix.my.com`.
 ```
 
 * Execute `create_ignition.sh`  This will generate ssh keys, generate install-config.yaml, create a directory based on the cluster name, and create a set of ignition files.
-*  Copy the keys to /root/.ssh so that you can ssh (without password) to those VMs. Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
+*  Copy the keys to /root/.ssh so that you can ssh (without password) to all the VMs (userid is `core`, more on that later...). Don't overwrite id_rsa, id_rsa.pub if you already have keys that you care about:
 
 `cp ssh_key /root/.ssh/id_rsa`  
 `cp ssh_key.pub /root/.ssh/id_rsa.pub`
@@ -352,7 +351,7 @@ At this point you have created a set of configuration files in /home/youhome/$PR
   [6daf02c4]: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/ "Red Hat Download Site"
 
 
-#### Update DNS:
+## Update DNS:
 * On 1st run only:  
   Execute
   `add_dns.sh`
@@ -407,7 +406,7 @@ etcd-1.myprefix.my.com. 0	IN	A	172.16.0.22
 ```
 
 
-#### Create the VMs:
+## Create the VMs:
 - Execute `deploy.sh > main.tf`. This creates the terraform tf
 
 - Run `terraform init`
@@ -418,19 +417,21 @@ This should complete with:
 Apply complete! Resources: 10 added, 0 changed, 0 destroyed.
 ```
 
-At this point you have created bootstrap, loadbalancer, 3 master, and 3 worker VMs!  They are powered off.
+At this point you have created bootstrap, loadbalancer, 3 master, and 3 worker VMs!  They are powered off. Do not power them on yet.
 
 
-#### Add custom properties to the VMs
+## Add custom properties to the VMs
 We need to add properties to the VMs which are used for further configuration of the VMs during the installation process.
 
-- Run `vcd.sh`. This will add a "ProductSectionList" containing 2 properties: `guestinfo.ignition.config.data`  information to the VApp Template for each CoreOS VM, and `guestinfo.ignition.config.data.encoding` with a value of `base64`.
-It will also add other properties to bootstrap and loadbalancer.
+- Run `vcd.sh`. The script will use VMWare APIs to add a "ProductSectionList" to the VApp Template for each VM.  The "ProductSectionList" contains 2 properties: 
+    * `guestinfo.ignition.config.data` - this is information that is used to reconfigure the VM on first boot (and only on first boot)
+    * `guestinfo.ignition.config.data.encoding` with a value of `base64`.
+The script will also add other properties to bootstrap and loadbalancer.
 - To verify that vcd.sh worked, run `vcd_get_after_vcd_put.sh` which will GET all the config that vcd.sh POSTed.  The script writes files to /tmp
    - Verify the files in /tmp.  There should be correct ignition data in the Product Section in each CoreOS VApp template. (Hint: run base64 -d on the encoded parts to see what is encoded)
 
-#### Let OpenShift finish the installation:
-Once you power on all the VMs there is an intricate dance between all the VMs which results in a completed install. You play a manual role as well by approving pending certificates.
+## Let OpenShift finish the installation:
+Once you power on all the VMs there is an intricate dance between all the VMs which results in a completed install. You play a manual role as well by approving pending certificates.  To debug see **Debugging the OCP installation dance** below.
 
 - power on all the VMs in the VAPP.  Alternatively:
 - change terraform template to power on the VMs: run `sed -i "s/false/true/" main.tf`
@@ -491,7 +492,20 @@ service-ca                                 4.5.22    True        False         F
 storage                                    4.5.22    True        False         False      53m
 
 ```
-#### Configuration to enable OCP console login
+#### Debugging the OCP installation dance
+
+As noted above you power on all the VMs at once and magically OpenShift gets installed.  We will explain enough of the magic so that you can figure out what happened when things go wrong.
+
+When the machines boot for the first time they each have special logic which runs scripts to further configure the VMs.  The first time they boot up using DHCP.  The "ignition" configuration is applied which switches the VMs to static IP, and then the machines reboot.  TODO how do you tell if this step failed?  Look at the VMs in VCD console to get clues about their network config?
+
+Assuming Bootstrap VM boots correctly, the first thing it does is pull additional ignition data from the bastion HTTP server.  If you don't see a 200 get successful in the bastion HTTP server log within a few minutes of Bootstrap being powered on, that is a problem
+
+Next Bootstap   installs an OCP control plane on itself, as well as an http server that it uses to help the master nodes get their own cluster setup.  You can ssh into boostrap (ssh core@172.16.0.20) and watch the logs.  bootstrap will print the jounalctl command when you login: `journalctl -b -f -u release-image.service -u bootkube.service` . Look carefully at the logs. Typical problems at this stage are:
+  * bad/missing pull secret
+  * no internet access - double check your edge configuration, run tyical ip network debug
+  
+
+## Configuration to enable OCP console login
 - Get the console url by running `oc get routes console -n openshift-console`
 
 `oc get routes console -n openshift-console`
@@ -513,7 +527,7 @@ storage                                    4.5.22    True        False         F
 - id is `kubeadmin` and password is in `<clusternameDir>/auth/kubeadmin-password`
 
 
-### One last step you must complete in order to ensure the stability of your cluster!
+## One last step you must complete in order to ensure the stability of your cluster!
 Log in to the Load Balancer form the Bastion   
 `ssh core@172.16.0.19`
 
@@ -570,7 +584,7 @@ Save the file and restart the haproxy service.
 - [Exposing the Registry](https://docs.openshift.com/container-platform/4.5/registry/securing-exposing-registry.html)
 
 
-### Reset the environment and redeploy
+## Reset the environment and redeploy
 Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and start over:
 ```
    terraform destroy --auto-approve        # deletes all the VMs
@@ -583,7 +597,7 @@ Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and st
 * Go back to **Create Ignition files**
 
 
-### Debug
+## Debug
  * connectivity problems between bastion and other VMs: Temporarily turn off firewall on Bastion.  We have added firewall rules but there may be more "allow" rules needed.
 
  * To test  HTTP server.  Look at `/usr/local/openshift/env/env.example.com/append-bootstrap.ign` and copy the "source" url.  This is the critical bootstrap-static.ign file that is the primary ignition file
