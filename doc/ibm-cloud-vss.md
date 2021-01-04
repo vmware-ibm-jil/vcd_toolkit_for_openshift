@@ -572,7 +572,7 @@ Save the file and restart the haproxy service.
 
 `sudo systemctl restart haproxy`
 
-**That's it!  You have an OpenShift Cluster ready to go enjoy!**
+**That's it!  You have an OpenShift Cluster ready to enjoy!**
 
 ## Optional Steps:
 
@@ -591,9 +591,7 @@ Its easy to delete the Loadbalancer, Bootstrap, and OpenShift cluster VMs and st
    mv /home/yourHome/#PREFIXTODOMAIN/ some-backup-dir               # backup everything generated in last run
    mkdir /home/yourHome/#PREFIXTODOMAIN                             # new deployment directory
    cp some-backup-dir/env.sh /home/yourHome/#PREFIXTODOMAIN/        # env.sh contains all the needed configuration
-   cp -r some-backup-dir/.terraform//home/yourHome/#PREFIXTODOMAIN/
 ```
-* TODO can we put .terraform (VCD Provider) into /usr/local/openshift/:
 * Go back to **Create Ignition files**
 
 
