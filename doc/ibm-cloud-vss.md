@@ -575,6 +575,8 @@ Save the file and restart the haproxy service.
 
 **That's it!  You have an OpenShift Cluster ready to enjoy!**
 
+* you can **shutdown and/or delete the bootstrap VM**  now.  It is no longer required.
+
 ## Optional Steps:
 
 - Add an NFS Server to provide Persistent storage. [Here is an article on how to set this up](https://medium.com/faun/openshift-dynamic-nfs-persistent-volume-using-nfs-client-provisioner-fcbb8c9344e). Make the NFS Storage Class the default Storage Class   
