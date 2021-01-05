@@ -494,13 +494,13 @@ storage                                    4.5.22    True        False         F
 ```
 #### Debugging the OCP installation dance
 
-As noted above you power on all the VMs at once and magically OpenShift gets installed.  We will explain enough of the magic so that you can figure out what happened when things go wrong.
+As noted above you power on all the VMs at once and magically OpenShift gets installed.  This section will explain enough of the magic so that you can figure out what happened when things go wrong. See Reference section below for deeper debug instructions
 
-When the machines boot for the first time they each have special logic which runs scripts to further configure the VMs.  The first time they boot up using DHCP.  The "ignition" configuration is applied which switches the VMs to static IP, and then the machines reboot.  TODO how do you tell if this step failed?  Look at the VMs in VCD console to get clues about their network config?
+When the machines boot for the first time they each have special logic which runs scripts to further configure the VMs.  The first time they boot up using DHCP for network configuration.  When they boot, the "ignition" configuration is applied which switches the VMs to static IP, and then the machines reboot.  TODO how do you tell if this step failed?  Look at the VMs in VCD console to get clues about their network config?
 
 Assuming Bootstrap VM boots correctly, the first thing it does is pull additional ignition data from the bastion HTTP server.  If you don't see a 200 get successful in the bastion HTTP server log within a few minutes of Bootstrap being powered on, that is a problem
 
-Next Bootstap   installs an OCP control plane on itself, as well as an http server that it uses to help the master nodes get their own cluster setup.  You can ssh into boostrap (ssh core@172.16.0.20) and watch the logs.  bootstrap will print the jounalctl command when you login: `journalctl -b -f -u release-image.service -u bootkube.service` . Look carefully at the logs. Typical problems at this stage are:
+Next Bootstap installs an OCP control plane on itself, as well as an http server that it uses to help the master nodes get their own cluster setup.  You can ssh into boostrap (ssh core@172.16.0.20) and watch the logs.  Bootstrap will print the jounalctl command when you login: `journalctl -b -f -u release-image.service -u bootkube.service` . Look carefully at the logs. Typical problems at this stage are:
   * bad/missing pull secret
   * no internet access - double check your edge configuration, run tyical ip network debug
   
@@ -527,14 +527,15 @@ Next Bootstap   installs an OCP control plane on itself, as well as an http serv
 - id is `kubeadmin` and password is in `<clusternameDir>/auth/kubeadmin-password`
 
 
-## One last step you must complete in order to ensure the stability of your cluster!
-Log in to the Load Balancer form the Bastion   
+## Remove Bootstrap from the Load Balancer
+Complete this step to ensure the stability of your cluster!
+Log in to the Load Balancer from Bastion:   
 `ssh core@172.16.0.19`
 
-**Note: In order for this section to work, you need to have v2 (as denoted in the comments) on your machine when it first booted. This requires a version newer than LBOpenshift-0.1 dated 10/06/2020**  
+**Note:You need to have used IBM VMWare Solution Shared Public Catalog - Load Balancer: "lbopenshiftv2" (which is the default configuration in env.sh).  LBOpenshift-0.1 template is no longer supported**  
 
 `vi /etc/haproxy/haproxy.cfg`   
-and comment out the lines that contain `172.16.0.20`
+and comment out the lines that contain `172.16.0.20` (which is Bootstrap VM)
 ```
 backend 6443
         balance roundrobin
