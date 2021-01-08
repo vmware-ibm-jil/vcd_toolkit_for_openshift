@@ -51,6 +51,8 @@ Much of the following is covered in general in the [Operator Guide/Networking](h
 ### Create private networks
 
 Create a network where we will install VMs and OCP.
+
+* From your vCloud Director console, click on your newly created Data Center's tile
 * Go to main menu > Networking > Networks and select **NEW** or **ADD**
   - Select Network Type: `Routed`
   - General:
@@ -73,12 +75,13 @@ Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can u
 The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.
 Gather the following information that you will need when configuring the ESG: 
 * Make a `list of the IPs and Sub-allocated IP Addresses` for the ESG.       
+* From your vCloud Director console, click on your newly created Data Center's tile
 * Go to main menu > Networking > Edges,  and Select your ESG
   - Go to `Networks and subnets` and copy down the `Participating Subnets` of the `tenant-external` and `servicexx` external networks. (we will need this info later)
     - the tenant-external network allows external internet routing
     - the service network allows routing to IBM Cloud private network /services
 
-For the following steps go to main menu > Networks > Edges > Select your ESG and select **SERVICES** 
+For the following steps go to main menu > Networking > Edges > Select your ESG and select **SERVICES** 
 
 See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-traffic
 
@@ -98,8 +101,11 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
     - go to the NAT tab and select '+SNAT RULE' in the NAT44 Rules
       - Applied On: **<your>-tenant-external**
       - Original Source IP/Range: **172.16.0.1/24**
-      - Translated Source IP/Range: pick an address not already used address from the sub-allocated network IPs
+      - Translated Source IP/Range: pick an address not already used address from the sub-allocated network IPs (you can find them at IBM Cloud > VMWare > Resources > your resource)
       - Description: **ocpnet outbound**
+      - select "Keep"
+      - Select: "Save changes"
+
 
 #### Outbound from OCP private network to IBM Cloud private network
 [Official instruction to connect to the IBM Cloud Services Private Network](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-access).  Our shorthand setup steps:
@@ -120,6 +126,9 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
       - Original Source IP/Range: **172.16.0.1/24**
       - Translated Source IP/Range: enter the `Primary IP` for the service network interface copied from the ESG settings (Or select it from the dropdown list)
       - Description: **access to the IBM Cloud private**
+      - select "Keep"
+      - Select: 'Save changes'
+
 
 #### Inbound config to the bastion on OCP private network
 We need to configure DNAT so that we have ssh access the bastion VM from public internet:
@@ -138,6 +147,8 @@ We need to configure DNAT so that we have ssh access the bastion VM from public 
       - Original Source IP/Range: enter the same public IP that you used in the firewall rule
       - Translated Source IP/Range: **172.16.0.10**
       - Description: **access to bastion host**
+      - select "Keep"
+      - Select: 'Save changes'
 
 #### Inbound config to OCP Console
 Configure DNAT so that you have https access to the console from public internet:
@@ -147,7 +158,7 @@ Configure DNAT so that you have https access to the console from public internet
       - Destination: Select the 'IP'
         - choose an available IP address from your list of  `public/sub-allocated IPs` and enter it
       - Service: Protocol: `any`
-     - Select: 'Save changes'
+      - Select: 'Save changes'
 
 2. NAT
     - go to the NAT tab and select '+DNAT RULE' in the NAT44 Rules
@@ -155,18 +166,23 @@ Configure DNAT so that you have https access to the console from public internet
       - Original Source IP/Range: choose an available IP address from your list of  `public/sub-allocated IPs` and enter it 
       - Translated Source IP/Range: **172.16.0.19** (This is the IP address we will use for the Load Balancer)
       - Description: **access to ocp console**
+      - select "Keep"
+      - Select: 'Save changes'
 
 #### Setup DHCP
 * Our Edge gateway will provide DHCP services.  On the Edge > DHCP, click + and configure DHCP with the following settings:
     ```
     IPRange: 172.16.0.150-172.16.0.245
+    Auto Configure DNS: no
     Primary Nameserver: 172.16.0.10 (bastion)
-    AutoConfig DNS: no
-    Gateway: 172.16.0.1
-    Netmask: 255.255.255.0
+    Default Gateway: 172.16.0.1
+    Subnet Mask: 255.255.255.0
     Lease: 86400
     ```
-* Toggle DHCP Service on
+    - select "Keep"
+    - Select: 'Save changes'
+* Toggle "DHCP Service Status" on
+* Select: 'Save changes'
 
 * TODO - should document creating a simple VM or 2 for testing.
 * check if DHCP is up:  From a VM `sudo nmap --script broadcast-dhcp-discover`
