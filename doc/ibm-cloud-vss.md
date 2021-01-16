@@ -206,6 +206,11 @@ After the VM is created, connect it to your network:
 #### Enable Redhat entitlement
   * You need to enable RedHat entitlement so that you can use yum.
   * ssh to bastion and execute the [steps in bullet 3 here](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-public-cat-rhel) to register the VM
+  * **NOTE** if later on you are unable to yum install packages, you may need to `attach` to the subscription manager
+```
+    subscription-manager attach --auto
+```
+  * For more info see [Subscription Manager Cheatsheet](https://access.redhat.com/sites/default/files/attachments/rh_sm_command_cheatsheet_1214_jcs_print.pdf)
 
 #### Install and configure DNS based on dnsmasq
 We will use DNSMasq to be our local DNS server.  We need a local DNS server to resolve names for the nodes (VMs) in our OpenShift Cluster. 
