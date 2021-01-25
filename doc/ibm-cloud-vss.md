@@ -208,20 +208,55 @@ The Bastion VM hosts the vcd_toolkit_for_openshift and is the VM where we launch
 Go to Virtual Machines > **New VM**
 Name: **bastion**
   - **From Template**
-  - Select **vm-redhat8** (todo - have to test bastion setup instructions with redhat8, we know it works but have not double checked the instructions.  If you have a problem please open an issue)
+  - Select **vm-rhel8** (todo - have to test bastion setup instructions with redhat8, we know it works but have not double checked the instructions.  If you have a problem please open an issue)
+  - Select 'Ok'
 
-After the VM is created, connect it to your network:
+
+
+After the VM is created, set a password:
  - from Virtual Machines, select bastion VM
-  - Details > Hardware > **NICs**
+ - Guest OS Customisation > edit
+ - Specify password: (set a password)
+ - Click "Save"
+
+
+
+
+Connect it to your network:
+ - from Virtual Machines, select bastion VM
+ - Hardware > **NICs** > edit > 
     - select **Connected**
     - Network = **ocpnet**
     - IP Mode = **Static - Manual**
     - IP Address **172.16.0.10**
     - Click **Save**  
 
+
+For some of these changes to take effect, you need to reboot the VM:
+- Go to Virtual Machines 
+  - Select "Power Off" from the 'Actions' drop down list
+  - Wait for it to power off
+  - Select "Power On and Force Recustomization" from the 'Actions' drop down list. 
+
+Test SSH login, using the `public/sub-allocated IP` address that you assigned to the bastion host, e.g:
+
+```
+ssh root@161.156.181.249
+```
+
+
+
+
 #### Enable Redhat entitlement
   * You need to enable RedHat entitlement so that you can use yum.
   * ssh to bastion and execute the [steps in bullet 3 here](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-public-cat-rhel) to register the VM
+
+* NOTE if later on you are unable to yum install packages, you may need to attach to the subscription manager
+```
+    subscription-manager attach --auto
+```
+For more info see [Subscription Manager Cheatsheet](https://access.redhat.com/sites/default/files/attachments/rh_sm_command_cheatsheet_1214_jcs_print.pdf)
+
 
 #### Install and configure DNS based on dnsmasq
 We will use DNSMasq to be our local DNS server.  We need a local DNS server to resolve names for the nodes (VMs) in our OpenShift Cluster. 
@@ -252,15 +287,18 @@ dnsmasq is configured in /etc/dnsmasq.conf.  We need to make the following updat
     `listen-address=::1,127.0.0.1,172.16.0.10`
 
 - Run the following command to see all the active configuration lines:
-`grep -v -e '^#' -e '^$'  /etc/dnsmasq.conf`
+`grep -v -e '^#' -e '^$' /etc/dnsmasq.conf | sort`
 
-```
-  no-dhcp-interface=ens192
-  server=8.8.8.8
-  server=8.8.4.4
-  listen-address=127.0.0.1
+  ```
+  conf-dir=/etc/dnsmasq.d,.rpmnew,.rpmsave,.rpmorig
+  group=dnsmasq
   interface=ens192
   interface=lo
+  listen-address=127.0.0.1
+  no-dhcp-interface=ens192
+  server=8.8.4.4
+  server=8.8.8.8
+  user=dnsmasq
   ```
 - Enable and restart dnsmasq service:
     * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
@@ -293,6 +331,7 @@ ibm.com.		21599	IN	A	129.42.38.10
 ```
 #### Install preReqs of the Terraform  and SimpleHTTP server:
   - `yum install unzip`
+  - `yum install git`
   - `yum install python3`
   - `yum install -y yum-utils`
   - `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
@@ -309,10 +348,16 @@ firewall-cmd --reload
 [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
 #### Start HTTP Server
-The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve their ignition files.
-* Important: start the server from / directory so that path to ignition files is correct!
-* `cd /; nohup python -m SimpleHTTPServer 80 &`
-* Note: to see requests to the server `tail -f /nohup.out`
+The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve their ignition files. Important: you need to start the server from the root directory, `/`, so that path to ignition files is correct!
+
+```
+cd /
+nohup python -m SimpleHTTPServer 80 &
+```
+
+Note: to see requests to the server `tail -f /nohup.out` You can also test it with `curl http://localhost`
+
+
 
 
 ## Install VCD Toolkit
