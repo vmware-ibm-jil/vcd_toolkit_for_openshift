@@ -51,6 +51,8 @@ Much of the following is covered in general in the [Operator Guide/Networking](h
 ### Create private networks
 
 Create a network where we will install VMs and OCP.
+
+* From your vCloud Director console, click on your newly created Data Center's tile
 * Go to main menu > Networking > Networks and select **NEW** or **ADD**
   - Select Network Type: `Routed`
   - General:
@@ -73,12 +75,13 @@ Each vCloud Datacenter comes with 5 IBM Cloud public IP addresses which we can u
 The sub-allocated address are available in IBM Cloud on the vCloud instance Resources page.
 Gather the following information that you will need when configuring the ESG: 
 * Make a `list of the IPs and Sub-allocated IP Addresses` for the ESG.       
+* From your vCloud Director console, click on your newly created Data Center's tile
 * Go to main menu > Networking > Edges,  and Select your ESG
   - Go to `Networks and subnets` and copy down the `Participating Subnets` of the `tenant-external` and `servicexx` external networks. (we will need this info later)
     - the tenant-external network allows external internet routing
     - the service network allows routing to IBM Cloud private network /services
 
-For the following steps go to main menu > Networks > Edges > Select your ESG and select **SERVICES** 
+For the following steps go to main menu > Networking > Edges > Select your ESG and select **SERVICES** 
 
 See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-traffic
 
@@ -98,8 +101,11 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
     - go to the NAT tab and select '+SNAT RULE' in the NAT44 Rules
       - Applied On: **<your>-tenant-external**
       - Original Source IP/Range: **172.16.0.1/24**
-      - Translated Source IP/Range: pick an address not already used address from the sub-allocated network IPs
+      - Translated Source IP/Range: pick an address not already used address from the sub-allocated network IPs (you can find them at IBM Cloud > VMWare > Resources > your resource)
       - Description: **ocpnet outbound**
+      - select "Keep"
+      - Select: "Save changes"
+
 
 #### Outbound from OCP private network to IBM Cloud private network
 [Official instruction to connect to the IBM Cloud Services Private Network](https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared_vcd-ops-guide#shared_vcd-ops-guide-enable-access).  Our shorthand setup steps:
@@ -120,6 +126,9 @@ See also https://cloud.ibm.com/docs/vmwaresolutions?topic=vmwaresolutions-shared
       - Original Source IP/Range: **172.16.0.1/24**
       - Translated Source IP/Range: enter the `Primary IP` for the service network interface copied from the ESG settings (Or select it from the dropdown list)
       - Description: **access to the IBM Cloud private**
+      - select "Keep"
+      - Select: 'Save changes'
+
 
 #### Inbound config to the bastion on OCP private network
 We need to configure DNAT so that we have ssh access the bastion VM from public internet:
@@ -138,6 +147,8 @@ We need to configure DNAT so that we have ssh access the bastion VM from public 
       - Original Source IP/Range: enter the same public IP that you used in the firewall rule
       - Translated Source IP/Range: **172.16.0.10**
       - Description: **access to bastion host**
+      - select "Keep"
+      - Select: 'Save changes'
 
 #### Inbound config to OCP Console
 Configure DNAT so that you have https access to the console from public internet:
@@ -147,7 +158,7 @@ Configure DNAT so that you have https access to the console from public internet
       - Destination: Select the 'IP'
         - choose an available IP address from your list of  `public/sub-allocated IPs` and enter it
       - Service: Protocol: `any`
-     - Select: 'Save changes'
+      - Select: 'Save changes'
 
 2. NAT
     - go to the NAT tab and select '+DNAT RULE' in the NAT44 Rules
@@ -155,18 +166,23 @@ Configure DNAT so that you have https access to the console from public internet
       - Original Source IP/Range: choose an available IP address from your list of  `public/sub-allocated IPs` and enter it 
       - Translated Source IP/Range: **172.16.0.19** (This is the IP address we will use for the Load Balancer)
       - Description: **access to ocp console**
+      - select "Keep"
+      - Select: 'Save changes'
 
 #### Setup DHCP
 * Our Edge gateway will provide DHCP services.  On the Edge > DHCP, click + and configure DHCP with the following settings:
     ```
     IPRange: 172.16.0.150-172.16.0.245
+    Auto Configure DNS: no
     Primary Nameserver: 172.16.0.10 (bastion)
-    AutoConfig DNS: no
-    Gateway: 172.16.0.1
-    Netmask: 255.255.255.0
+    Default Gateway: 172.16.0.1
+    Subnet Mask: 255.255.255.0
     Lease: 86400
     ```
-* Toggle DHCP Service on
+    - select "Keep"
+    - Select: 'Save changes'
+* Toggle "DHCP Service Status" on
+* Select: 'Save changes'
 
 * TODO - should document creating a simple VM or 2 for testing.
 * check if DHCP is up:  From a VM `sudo nmap --script broadcast-dhcp-discover`
@@ -192,16 +208,44 @@ The Bastion VM hosts the vcd_toolkit_for_openshift and is the VM where we launch
 Go to Virtual Machines > **New VM**
 Name: **bastion**
   - **From Template**
-  - Select **vm-redhat8** (todo - have to test bastion setup instructions with redhat8, we know it works but have not double checked the instructions.  If you have a problem please open an issue)
+  - Select **vm-rhel8** (todo - have to test bastion setup instructions with redhat8, we know it works but have not double checked the instructions.  If you have a problem please open an issue)
+  - Select 'Ok'
 
-After the VM is created, connect it to your network:
+
+
+After the VM is created, set a password:
  - from Virtual Machines, select bastion VM
-  - Details > Hardware > **NICs**
+ - Guest OS Customisation > edit
+ - Specify password: (set a password)
+ - Click "Save"
+
+
+
+
+Connect it to your network:
+ - from Virtual Machines, select bastion VM
+ - Hardware > **NICs** > edit > 
     - select **Connected**
     - Network = **ocpnet**
     - IP Mode = **Static - Manual**
     - IP Address **172.16.0.10**
     - Click **Save**  
+
+
+For some of these changes to take effect, you need to reboot the VM:
+- Go to Virtual Machines 
+  - Select "Power Off" from the 'Actions' drop down list
+  - Wait for it to power off
+  - Select "Power On and Force Recustomization" from the 'Actions' drop down list. 
+
+Test SSH login, using the `public/sub-allocated IP` address that you assigned to the bastion host, e.g:
+
+```
+ssh root@161.156.181.249
+```
+
+
+
 
 #### Enable Redhat entitlement
   * You need to enable RedHat entitlement so that you can use yum.
@@ -211,6 +255,13 @@ After the VM is created, connect it to your network:
     subscription-manager attach --auto
 ```
   * For more info see [Subscription Manager Cheatsheet](https://access.redhat.com/sites/default/files/attachments/rh_sm_command_cheatsheet_1214_jcs_print.pdf)
+
+* NOTE if later on you are unable to yum install packages, you may need to attach to the subscription manager
+```
+    subscription-manager attach --auto
+```
+For more info see [Subscription Manager Cheatsheet](https://access.redhat.com/sites/default/files/attachments/rh_sm_command_cheatsheet_1214_jcs_print.pdf)
+
 
 #### Install and configure DNS based on dnsmasq
 We will use DNSMasq to be our local DNS server.  We need a local DNS server to resolve names for the nodes (VMs) in our OpenShift Cluster. 
@@ -241,15 +292,18 @@ dnsmasq is configured in /etc/dnsmasq.conf.  We need to make the following updat
     `listen-address=::1,127.0.0.1,172.16.0.10`
 
 - Run the following command to see all the active configuration lines:
-`grep -v -e '^#' -e '^$'  /etc/dnsmasq.conf`
+`grep -v -e '^#' -e '^$' /etc/dnsmasq.conf | sort`
 
-```
-  no-dhcp-interface=ens192
-  server=8.8.8.8
-  server=8.8.4.4
-  listen-address=127.0.0.1
+  ```
+  conf-dir=/etc/dnsmasq.d,.rpmnew,.rpmsave,.rpmorig
+  group=dnsmasq
   interface=ens192
   interface=lo
+  listen-address=127.0.0.1
+  no-dhcp-interface=ens192
+  server=8.8.4.4
+  server=8.8.8.8
+  user=dnsmasq
   ```
 - Enable and restart dnsmasq service:
     * `systemctl enable dnsmasq.service` # so that dnsmasq will start after reboot
@@ -282,6 +336,7 @@ ibm.com.		21599	IN	A	129.42.38.10
 ```
 #### Install preReqs of the Terraform  and SimpleHTTP server:
   - `yum install unzip`
+  - `yum install git`
   - `yum install python3`
   - `yum install -y yum-utils`
   - `yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo`
@@ -298,10 +353,16 @@ firewall-cmd --reload
 [More about firewalld](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-using_firewalls#sec-Getting_started_with_firewalld)
 
 #### Start HTTP Server
-The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve their ignition files.
-* Important: start the server from / directory so that path to ignition files is correct!
-* `cd /; nohup python -m SimpleHTTPServer 80 &`
-* Note: to see requests to the server `tail -f /nohup.out`
+The HTTP Server is used by the bootstrap and other coreOS nodes to retrieve their ignition files. Important: you need to start the server from the root directory, `/`, so that path to ignition files is correct!
+
+```
+cd /
+nohup python -m SimpleHTTPServer 80 &
+```
+
+Note: to see requests to the server `tail -f /nohup.out` You can also test it with `curl http://localhost`
+
+
 
 
 ## Install VCD Toolkit
