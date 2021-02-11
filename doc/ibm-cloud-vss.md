@@ -1,3 +1,14 @@
+**Note:** this project supports OpenShift 4.4 and 4.5 only.  For OpenShift 4.6 please use https://github.com/ibm-cloud-architecture/terraform-openshift4-vcd
+ 
+The scripting and terraform templates in `terraform-openshift-vcd` are a major improvement over `vcd_toolkit_for_openshift`:
+ - Supports OCP 4.6
+ - Configuration of Edge Gateway and Bastion server is consistent with `vcd_toolkit_for_openshift`
+ - configurable number of workers
+ - automatic CSR signing
+ - less manual steps
+ - less base images:  Only uses CoreOS image.  No custom image for Loadbalancer
+ - more "terraform centric" approach
+
 ### Overview
 [VCD Toolkit for OpenShift Overview here](https://github.com/vmware-ibm-jil/vcd_toolkit_for_openshift)
 
